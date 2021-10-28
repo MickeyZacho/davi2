@@ -8,6 +8,7 @@ export default props => {
   if (!data.map) return null;
   const width = viewport.width;
   const height = viewport.height;
+  //const point = data.map(d => viewport.project(d.position));
   const point = data.map(d => viewport.project(d.position));
   const vor = voronoi().extent([[0, 0], [width, height]]);
   const polygons = vor(point).polygons();
