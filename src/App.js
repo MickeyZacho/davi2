@@ -3,11 +3,11 @@ import DeckGL, { WebMercatorViewport } from "deck.gl";
 import MapGL from "react-map-gl";
 import renderLayers from "./Layers.js";
 import Voronoi from "./voronoi.js";
-
+import { apiBase } from "./api.js";
 import { csv } from "d3-fetch";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
-const DATA_URL = "./worldcities2.csv";
+const DATA_URL = "./worldcities3.csv";
 
 export default () => {
   const [data, setData] = useState({});
@@ -15,14 +15,31 @@ export default () => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await csv(DATA_URL);
+      /*var citybox = {
+        Topleftlat: 59.6260769571419,
+        Topleftlong: -13.21956641460763,
+        Bottomrightlat: 55.10115713809608,
+        Bottomrightlong:12.96270706010456
+      }
+
+      const result = await apiBase.get(`API/V1/Cities?topLeft.Lat=${citybox.Topleftlat}&topLeft.Lon=${citybox.Topleftlong}&bottomRight.Lat=${citybox.Bottomrightlat}&bottomRight.Lon=${citybox.Bottomrightlong}`)
+      */
       const points = result.map(function (d) {
-        return {CityName: d.city_ascii, position: [+d.lng, +d.lat], population: d.population };
+        //console.log(d);
+        return {
+          CityName: d.city_ascii,
+          position: [+d.lng, +d.lat],
+          population: d.population,
+          country: d.country
+        };
       });
+      const finalpoints = points.filter((point) => point.population !== "");
       /*let a  = {CityName: "aTown", Id: 1, Latitude: 56.591734, Longitude: 9.130307};
       let b  = {CityName: "bTown", Id: 2, Latitude: 56.496441, Longitude: 9.620431};
       let c  = {CityName: "cTown", Id: 3, Latitude: 55.853838, Longitude: 9.189404};
       */
-      setData(points)
+      console.log("GOT HERE");
+      setData(finalpoints);
       //setData([{position: [+a.Longitude, +a.Latitude]},
       //         {position: [+b.Longitude, +b.Latitude]},
       //         {position: [+c.Longitude,+c.Latitude]}]);
@@ -40,7 +57,7 @@ export default () => {
       zoom: 6,
       maxZoom: 16,
       pitch: 0,
-      bearing: 0
+      bearing: 0,
     })
   );
 
@@ -51,7 +68,7 @@ export default () => {
         return {
           ...v,
           width: window.innerWidth,
-          height: window.innerHeight
+          height: window.innerHeight,
         };
       });
     };
@@ -71,7 +88,7 @@ export default () => {
       >
         <DeckGL
           layers={renderLayers({
-            data: data
+            data: data,
           })}
           initialViewState={viewport}
           controller={true}
