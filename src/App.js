@@ -1,14 +1,36 @@
 import React, { useEffect, useState } from "react";
 import DeckGL, { WebMercatorViewport } from "deck.gl";
-import MapGL from "react-map-gl";
+//import MapGL, {MapContext} from 'react-map-gl';
 import renderLayers from "./Layers.js";
 import Voronoi from "./voronoi.js";
 import { apiBase } from "./api.js";
 import { csv } from "d3-fetch";
+import MapGL from 'react-map-gl';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
+/*
+function CustomMarker(props) {
+  const context = React.useContext(MapContext);
+  
+  const {longitude, latitude} = props;
 
+  const [x, y] = context.viewport.project([longitude, latitude]);
+
+  const markerStyle = {
+    position: 'absolute',
+    background: '#fff',
+    left: x,
+    top: y
+  };
+
+  return (
+    <div style={markerStyle} >
+      ({longitude}, {latitude})
+    </div>
+  );
+}
+*/
 export default () => {
   const [data, setData] = useState({});
 
@@ -97,4 +119,4 @@ export default () => {
       </MapGL>
     </div>
   );
-};
+}; // <CustomeMarker longitude={-122.45} latitude={37.78} />
