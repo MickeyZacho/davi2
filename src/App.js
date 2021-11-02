@@ -6,6 +6,7 @@ import Voronoi from "./voronoi.js";
 import { apiBase } from "./api.js";
 import { csv } from "d3-fetch";
 import MapGL from 'react-map-gl';
+import { TransparencySlider } from "./components/slider.js";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
@@ -90,7 +91,7 @@ export default () => {
         return {
           ...v,
           width: window.innerWidth,
-          height: window.innerHeight,
+          height: 600,
         };
       });
     };
@@ -117,6 +118,7 @@ export default () => {
         />
         <Voronoi viewport={viewport} data={data} />
       </MapGL>
+      <TransparencySlider/>
     </div>
   );
 }; // <CustomeMarker longitude={-122.45} latitude={37.78} />
