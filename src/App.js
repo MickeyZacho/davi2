@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import DeckGL, { WebMercatorViewport } from "deck.gl";
-//import MapGL, {MapContext} from 'react-map-gl';
+import MapGL, {MapContext} from 'react-map-gl';
 import renderLayers from "./Layers.js";
 import Voronoi from "./voronoi.js";
 import { apiBase } from "./api.js";
 import { csv } from "d3-fetch";
-import MapGL from 'react-map-gl';
 import { TransparencySlider } from "./components/slider.js";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
-/*
+
 function CustomMarker(props) {
   const context = React.useContext(MapContext);
   
@@ -30,8 +29,8 @@ function CustomMarker(props) {
       ({longitude}, {latitude})
     </div>
   );
-}
-*/
+  }
+
 export default () => {
   const [data, setData] = useState({});
 
@@ -117,8 +116,10 @@ export default () => {
           controller={true}
         />
         <Voronoi viewport={viewport} data={data} />
+        <CustomMarker longitude={-122.45} latitude={37.78} />
       </MapGL>
       <TransparencySlider/>
+      
     </div>
   );
-}; // <CustomeMarker longitude={-122.45} latitude={37.78} />
+};  
