@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DeckGL, { WebMercatorViewport } from "deck.gl";
-import MapGL, {MapContext} from 'react-map-gl';
+import MapGL, { _useMapControl as useMapControl}  from 'react-map-gl';
 import renderLayers from "./Layers.js";
 import Voronoi from "./voronoi.js";
 import { apiBase } from "./api.js";
@@ -11,22 +11,34 @@ const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
 
 function CustomMarker(props) {
-  const context = React.useContext(MapContext);
+  //const context = React.useContext(MapContext);
   
   const {longitude, latitude} = props;
 
-  const [x, y] = context.viewport.project([longitude, latitude]);
+  const [string, setString] = React.useState(0);
 
+  const {context, containerRef} = useMapControl({
+    onDragStart: evt => {
+      // prevent the base map from panning
+      evt.stopPropagation();
+      
+    },
+    onClick: evt => {
+      if (evt.type === 'click') {
+        setString("farvel")
+      }
+    }
+  });
+  const [x, y] = context.viewport.project([longitude, latitude]);
   const markerStyle = {
     position: 'absolute',
     background: '#fff',
     left: x,
     top: y
   };
-
   return (
-    <div style={markerStyle} >
-      ({longitude}, {latitude})
+    <div ref={containerRef} style={markerStyle} >
+      {string}
     </div>
   );
   }
