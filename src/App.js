@@ -45,18 +45,19 @@ function CustomMarker(props) {
   }
 
 export default () => {
-  function importAll(r) {
-    return r.keys();
-  }
   
-  const countryFiles = importAll(require.context('../public/Country', false, /\.(csv)$/));
-  console.log(countryFiles)
+  
   const [data, setData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
+      function importAll(r) {
+        return r.keys();
+      }
       
+      const countryFiles = importAll(require.context('../public/Country', false, /\.(csv)$/));
       const result = await csv('./Country/' + countryFiles[0]);
+      console.log(countryFiles)
       /*var citybox = {
         Topleftlat: 59.6260769571419,
         Topleftlong: -13.21956641460763,
