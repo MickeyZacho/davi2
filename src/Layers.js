@@ -1,9 +1,9 @@
-import { ScatterplotLayer } from "deck.gl";
+import { ScatterplotLayer, TextLayer } from "deck.gl";
 
 export default props => {
   const { data } = props;
 
-  const layes = [
+  const layers = [
     new ScatterplotLayer({
       id: "scatter-layer",
       data,
@@ -16,9 +16,8 @@ export default props => {
       getRadius: d => Math.sqrt(d.exits),
       getFillColor: d => [255, 0, 0],
       getLineColor: d => [255, 0, 0],
-      getPosition: d => d.position
-    })
-  ];
+      getPosition: d => (d.position)
+    }),];
 
-  return layes;
+  return layers;
 };

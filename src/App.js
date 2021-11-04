@@ -11,9 +11,10 @@ const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
 
 function CustomMarker(props) {
+  
   //const context = React.useContext(MapContext);
   
-  const {longitude, latitude} = props;
+  const {longitude, latitude, cityname} = props;
 
   const [string, setString] = React.useState(0);
 
@@ -32,7 +33,7 @@ function CustomMarker(props) {
   const [x, y] = context.viewport.project([longitude, latitude]);
   const markerStyle = {
     position: 'absolute',
-    background: '#fff',
+    background: /*'#fff'*/'',
     left: x,
     top: y
   };
@@ -44,11 +45,18 @@ function CustomMarker(props) {
   }
 
 export default () => {
+  function importAll(r) {
+    return r.keys();
+  }
+  
+  const countryFiles = importAll(require.context('../public/Country', false, /\.(csv)$/));
+  console.log(countryFiles)
   const [data, setData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await csv(DATA_URL);
+      
+      const result = await csv('./Country/' + countryFiles[0]);
       /*var citybox = {
         Topleftlat: 59.6260769571419,
         Topleftlong: -13.21956641460763,
@@ -60,6 +68,7 @@ export default () => {
       */
       const points = result.map(function (d) {
         //console.log(d);
+        
         return {
           CityName: d.city_ascii,
           position: [+d.lng, +d.lat],
@@ -68,17 +77,10 @@ export default () => {
         };
       });
       const finalpoints = points.filter((point) => point.population !== "");
-      /*let a  = {CityName: "aTown", Id: 1, Latitude: 56.591734, Longitude: 9.130307};
-      let b  = {CityName: "bTown", Id: 2, Latitude: 56.496441, Longitude: 9.620431};
-      let c  = {CityName: "cTown", Id: 3, Latitude: 55.853838, Longitude: 9.189404};
-      */
       console.log("GOT HERE");
       setData(finalpoints);
-      //setData([{position: [+a.Longitude, +a.Latitude]},
-      //         {position: [+b.Longitude, +b.Latitude]},
-      //         {position: [+c.Longitude,+c.Latitude]}]);
     };
-
+    
     fetchData();
   }, []);
 
@@ -123,12 +125,16 @@ export default () => {
         <DeckGL
           layers={renderLayers({
             data: data,
+          }), 
+          renderLayers({
+            data: data,
           })}
           initialViewState={viewport}
           controller={true}
         />
+        
         <Voronoi viewport={viewport} data={data} />
-        <CustomMarker longitude={-122.45} latitude={37.78} />
+        <CustomMarker longitude={-122.45} latitude={37.78} cityname={"yo mama"} />
       </MapGL>
       <TransparencySlider/>
       
