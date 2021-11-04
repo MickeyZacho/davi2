@@ -134,9 +134,6 @@ export default () => {
         <DeckGL
           layers={renderLayers({
             data: data,
-          }), 
-          renderLayers({
-            data: data,
           })}
           initialViewState={viewport}
           controller={true}
