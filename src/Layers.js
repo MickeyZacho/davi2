@@ -10,7 +10,7 @@ export default props => {
       opacity: 0.5,
       stroked: true,
       filled: true,
-      radiusMinPixels: 10,
+      radiusMinPixels: 5,
       radiusMaxPixels: 1000,
       lineWidthMinPixels: 1,
       getRadius: d => Math.sqrt(d.exits),
