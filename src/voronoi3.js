@@ -58,8 +58,6 @@ export default props => {
       
     });*/
   }
-  console.log(count)
-  console.log(countb)
   //const polygons = Array.from(vor.cellPolygons());
   //console.log(lines.length)
   const pathGroupEl = useRef(null);

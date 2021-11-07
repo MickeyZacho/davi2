@@ -7,10 +7,10 @@ export default props => {
     new ScatterplotLayer({
       id: "scatter-layer",
       data,
-      opacity: 0.5,
+      opacity: 0.2,
       stroked: true,
       filled: true,
-      radiusMinPixels: 5,
+      radiusMinPixels: 1,
       radiusMaxPixels: 1000,
       lineWidthMinPixels: 1,
       getRadius: d => Math.sqrt(d.exits),
