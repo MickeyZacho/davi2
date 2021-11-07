@@ -4,10 +4,11 @@ import MapGL, { _useMapControl as useMapControl}  from 'react-map-gl';
 import renderLayers from "./Layers.js";
 import Voronoi from "./voronoi.js";
 import Voronoi2 from "./voronoi2.js";
+import Voronoi3 from "./voronoi3.js";
 import { apiBase } from "./api.js";
 import { csv } from "d3-fetch";
 import * as d3 from "d3";
-import { TransparencySlider } from "./components/slider.js";
+//import { TransparencySlider } from "./components/slider.js";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
@@ -54,7 +55,7 @@ export default () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const countries = ["Denmark", "Greenland", "Sweden", "Norway", "Liechtenstein", "Luxembourg", "Iceland", "Turkey", "Poland", "Finland", "Netherlands", "Greece", "Germany", "United States", "United Kingdom", "Ireland", "France", "Spain", "Portugal", "Korea, South", "China", "Indonesia", "Belgium", "Italy", "Austria", "Slovakia", "Hungary", "Romania", "Moldova", "Serbia", "Bosnia And Herzegovina", "Slovenia", "Czechia", "Switzerland", "Macedonia", "Albania","Bulgaria", "Kosovo", "Croatia", "Ukraine", "Belarus", "Lithuania", "Latvia", "Estonia", "Georgia", "Japan", "Thailand", "Taiwan", "Vietnam", "Philippines", "Romania", "Malaysia", "India", "Canada", "Cambodia", "Laos"]
+      const countries = ["Denmark", "Sweden","Norway"]//, "Sweden", "Norway", "Liechtenstein", "Luxembourg", "Iceland", "Turkey", "Poland", "Finland", "Netherlands", "Greece", "Germany", "United States", "United Kingdom", "Ireland", "France", "Spain", "Portugal", "Korea, South", "China", "Indonesia", "Belgium", "Italy", "Austria", "Slovakia", "Hungary", "Romania", "Moldova", "Serbia", "Bosnia And Herzegovina", "Slovenia", "Czechia", "Switzerland", "Macedonia", "Albania","Bulgaria", "Kosovo", "Croatia", "Ukraine", "Belarus", "Lithuania", "Latvia", "Estonia", "Georgia", "Japan", "Thailand", "Taiwan", "Vietnam", "Philippines", "Romania", "Malaysia", "India", "Canada", "Cambodia", "Laos"]
       let result = []
       var counter = 0;
       for (var i = 0; i < countries.length; i++){
@@ -78,9 +79,9 @@ export default () => {
       */
       const points = result.map(function (d) {
         //console.log(d);
-        
+        console.log(d.city)
         return {
-          CityName: d.city_ascii,
+          CityName: d.city,
           position: [+d.lng, +d.lat],
           population: d.population,
           country: d.country
@@ -140,11 +141,9 @@ export default () => {
           controller={true}
         />
         
-        <Voronoi2 viewport={viewport} data={data} />
+        <Voronoi3 viewport={viewport} data={data} />
         <CustomMarker longitude={-122.45} latitude={37.78} cityname={"yo mama"} />
       </MapGL>
-      <TransparencySlider/>
-      
     </div>
   );
 };  

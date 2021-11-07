@@ -16,6 +16,7 @@
     "d3-selection": "1.4.0",
     "d3-voronoi": "1.1.4",
     "deck.gl": "8.5.8",
+    "kd-tree-javascript": "^1.0.3",
     "react": "latest",
     "react-d3-library": "^1.1.8",
     "react-dom": "latest",
