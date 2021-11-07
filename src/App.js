@@ -3,6 +3,7 @@ import DeckGL, { WebMercatorViewport } from "deck.gl";
 import MapGL, { _useMapControl as useMapControl}  from 'react-map-gl';
 import renderLayers from "./Layers.js";
 import Voronoi from "./voronoi.js";
+import Voronoi2 from "./voronoi2.js";
 import { apiBase } from "./api.js";
 import { csv } from "d3-fetch";
 import * as d3 from "d3";
@@ -139,7 +140,7 @@ export default () => {
           controller={true}
         />
         
-        <Voronoi viewport={viewport} data={data} />
+        <Voronoi2 viewport={viewport} data={data} />
         <CustomMarker longitude={-122.45} latitude={37.78} cityname={"yo mama"} />
       </MapGL>
       <TransparencySlider/>
