@@ -3,7 +3,7 @@ import { Delaunay } from "d3-delaunay";
 import { select } from "d3-selection";
 
 export default props => {
-  const { viewport, data } = props;
+  const { viewport, data, opacity } = props;
 
   if (!data.map) return null;
   const width = viewport.width;
@@ -33,7 +33,8 @@ export default props => {
       .append("path")
       .attr("class", "cell")
       .attr("fill", "none")
-      .attr("stroke", "black");
+      .attr("stroke", "black")
+      .attr("opacity", opacity);
 
     selected.merge(enter).attr("d", d => {
       //console.log(d)
