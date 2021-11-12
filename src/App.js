@@ -144,10 +144,10 @@ export default () => {
     
   }, []);
 
-  /*useEffect(()=>{
+  useEffect(()=>{
     let procData = ClosestCity.Process(data, hotelData)
     setProcData(procData)
-  },[data,hotelData]);*/
+  },[data,hotelData]);
 
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
@@ -207,6 +207,7 @@ export default () => {
           initialViewState={viewport}
           controller={true}
         />
+        <Voronoi3 viewport={viewport} data={processedData}/>
         <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100}/>
       </MapGL>
     </div>
