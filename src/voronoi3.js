@@ -10,6 +10,7 @@ export default props => {
   const width = viewport.width;
   const height = viewport.height;
   //const point = data.map(d => viewport.project(d.position));
+  
   const point = data.map(d => viewport.project(d.position));
   
   const delau = Delaunay.from(point)
@@ -23,8 +24,8 @@ export default props => {
   data.forEach(e => {
     let nPos = viewport.project(e.position)
     let entry = {
-      lat: nPos[0],
-      lng: nPos[1],
+      lng: nPos[0],
+      lat: nPos[1],
       location: e.country
     }
     kdt.insert(entry)
@@ -37,7 +38,7 @@ export default props => {
   while(!res.done){
     let averageX = res.value.reduce((acc, c) => acc+(c[0]), 0)/res.value.length
     let averageY = res.value.reduce((acc, c) => acc+(c[1]), 0)/res.value.length
-    let near = kdt.nearest({lat: averageX, lng: averageY}, 1)[0][0].location
+    let near = kdt.nearest({lng: averageX, lat: averageY}, 1)[0][0].location
     count+=res.value.length
     for(let i = 0; i < res.value.length; i++){
       let posA = res.value[i]

@@ -5,13 +5,17 @@ import renderLayers from "./Layers.js";
 import Voronoi from "./voronoi.js";
 import Voronoi2 from "./voronoi2.js";
 import Voronoi3 from "./voronoi3.js";
+import FuncVoronoi from "./FuncVoronoi.js";
 import { apiBase } from "./api.js";
+import { ClosestCity } from "./algorithms/closestCity.js";
 import { csv } from "d3-fetch";
 import * as d3 from "d3";
+import funcVoronoi from "./FuncVoronoi.js";
 //import { TransparencySlider } from "./components/slider.js";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
+const HOTEL_URL = "./hotelsout/";
 const DATA_PATH = "./CountryPop/";
 
 function CustomMarker(props) {
@@ -52,7 +56,8 @@ export default () => {
   
   
   const [data, setData] = useState({});
-
+  const [hotelData, setHotelData] = useState({})
+  const [processedData, setProcData] = useState({})
   useEffect(() => {
     const fetchData = async () => {
       const countries = ["Denmark", "Sweden", "Norway", "Hong Kong", "Singapore", "Liechtenstein", "Luxembourg", "Iceland", "Turkey", "Poland", "Finland", "Netherlands", "Greece", "Germany", "United States", "United Kingdom", "Ireland", "France", "Spain", "Portugal", "Korea, South", "China", "Indonesia", "Belgium", "Italy", "Austria", "Slovakia", "Hungary", "Romania", "Moldova", "Serbia", "Bosnia And Herzegovina", "Slovenia", "Czechia", "Switzerland", "Macedonia", "Albania","Bulgaria", "Kosovo", "Croatia", "Ukraine", "Belarus", "Lithuania", "Latvia", "Estonia", "Georgia", "Japan", "Thailand", "Taiwan", "Vietnam", "Philippines", "Romania", "Malaysia", "India", "Canada", "Cambodia", "Laos"]
@@ -92,8 +97,44 @@ export default () => {
       setData(finalpoints);
     };
     
-    fetchData();
+
+    const fetchData2 = async () => {
+      let result = []
+      var counter = 0;
+      for (var i = 0; i < 291; i++){
+        await d3.json(HOTEL_URL + "hotels"+i + ".json").then((data) => {
+          for (var j = 0; j < data.Hotels.length; j++) {
+            //if(data.Hotels[j].Latitude>100 || data.Hotels[j].Latitude<-100) continue
+            result.push(data.Hotels[j])
+            counter++;
+          }
+        });
+      };
+      console.log("This was also reached")
+      console.log("counter: " +  counter)
+      const points = result.map(function (d) {
+        //console.log(d);
+        //console.log(d.city)
+        
+        return {
+          hotelId: d.id,
+          position: [+d.Longitude, +d.Latitude],
+          country: d.Country
+        };
+      });
+      console.log("GOT HERE");
+      setHotelData(points);
+    };
+    
+    fetchData()
+    fetchData2()
+    
   }, []);
+
+  /*useEffect(()=>{
+    let procData = ClosestCity.Process(data, hotelData)
+    setProcData(procData)
+  },[data,hotelData]);*/
 
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
@@ -133,17 +174,27 @@ export default () => {
         preventStyleDiffing={false}
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
       >
+        <DeckGL 
+          layers={renderLayers({
+            data: hotelData,
+            color: [0, 0, 255]
+          })}
+          initialViewState={viewport}
+          controller={true}
+        />
         <DeckGL
           layers={renderLayers({
             data: data,
+            color: [255, 0, 0]
           })}
           initialViewState={viewport}
           controller={true}
         />
         
-        <Voronoi3 viewport={viewport} data={data} />
+        
+        <Voronoi3 viewport={viewport} data={data}/>
         <CustomMarker longitude={-122.45} latitude={37.78} cityname={"yo mama"} />
       </MapGL>
     </div>
-  );
+  );//<Voronoi3 viewport={viewport} data={data}/>
 };  
