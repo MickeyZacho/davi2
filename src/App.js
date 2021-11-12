@@ -11,7 +11,9 @@ import { ClosestCity } from "./algorithms/closestCity.js";
 import { csv } from "d3-fetch";
 import * as d3 from "d3";
 import funcVoronoi from "./FuncVoronoi.js";
-//import { TransparencySlider } from "./components/slider.js";
+import { TransparencySlider } from "./components/slider.js";
+import Box from '@mui/material/Box';
+import { Slider } from '@mui/material';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
@@ -58,6 +60,17 @@ export default () => {
   const [data, setData] = useState({});
   const [hotelData, setHotelData] = useState({})
   const [processedData, setProcData] = useState({})
+  const [sliderProps, setSliderProps] = useState({
+    value: 20,
+    handleChange: (event, newValue)=>{
+      //event.persist()
+      console.log("valuechange: "+ event.target.value)
+      setSliderProps({value: newValue})
+      //event.preventDefault()
+      console.log("value after change: "+ sliderProps.value)
+    }
+  })
+  
   useEffect(() => {
     const fetchData = async () => {
       const countries = ["Denmark", "Sweden", "Norway", "Hong Kong", "Singapore", "Liechtenstein", "Luxembourg", "Iceland", "Turkey", "Poland", "Finland", "Netherlands", "Greece", "Germany", "United States", "United Kingdom", "Ireland", "France", "Spain", "Portugal", "Korea, South", "China", "Indonesia", "Belgium", "Italy", "Austria", "Slovakia", "Hungary", "Romania", "Moldova", "Serbia", "Bosnia And Herzegovina", "Slovenia", "Czechia", "Switzerland", "Macedonia", "Albania","Bulgaria", "Kosovo", "Croatia", "Ukraine", "Belarus", "Lithuania", "Latvia", "Estonia", "Georgia", "Japan", "Thailand", "Taiwan", "Vietnam", "Philippines", "Romania", "Malaysia", "India", "Canada", "Cambodia", "Laos"]
@@ -139,7 +152,7 @@ export default () => {
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
       width: window.innerWidth,
-      height: window.innerHeight,
+      height: window.innerHeight*0.9,
       longitude: -3.2943888952729092,
       latitude: 53.63605986631115,
       zoom: 6,
@@ -156,7 +169,7 @@ export default () => {
         return {
           ...v,
           width: window.innerWidth,
-          height: 600,
+          height: window.innerHeight*0.9,
         };
       });
     };
@@ -190,11 +203,20 @@ export default () => {
           initialViewState={viewport}
           controller={true}
         />
-        
-        
         <Voronoi3 viewport={viewport} data={processedData}/>
+        <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100}/>
         <CustomMarker longitude={-122.45} latitude={37.78} cityname={"yo mama"} />
       </MapGL>
     </div>
-  );//<Voronoi3 viewport={viewport} data={data}/>
+  );
+  //<Voronoi3 viewport={viewport} data={data}/>
+  // <div className="bg-gray-400">
+  //       <Box sx={{
+  //         width: window.innerWidth*0.5,
+  //         height: 25,
+  //         border: '1px dashed grey',
+  //       }}>
+  //         <Slider value={sliderProps.value} aria-label="Default" valueLabelDisplay="auto" onChange={sliderProps.handleChange} />
+  //       </Box>
+  //     </div>
 };  
