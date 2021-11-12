@@ -131,10 +131,10 @@ export default () => {
     
   }, []);
 
-  /*useEffect(()=>{
+  useEffect(()=>{
     let procData = ClosestCity.Process(data, hotelData)
     setProcData(procData)
-  },[data,hotelData]);*/
+  },[data,hotelData]);
 
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
@@ -192,7 +192,7 @@ export default () => {
         />
         
         
-        <Voronoi3 viewport={viewport} data={data}/>
+        <Voronoi3 viewport={viewport} data={processedData}/>
         <CustomMarker longitude={-122.45} latitude={37.78} cityname={"yo mama"} />
       </MapGL>
     </div>

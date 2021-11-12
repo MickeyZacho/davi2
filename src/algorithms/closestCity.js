@@ -17,7 +17,7 @@ export class ClosestCity{
         });
         hotelData.forEach(e => {
             
-            let closestCity = kdt.nearest({lng: e.position[0],lat: e.position[1]},1)[0][0]
+            let closestCity = kdt.nearest({lng: e.position[0],lat: e.position[1]},1)[0][0].city
             let entry = {
                 position: [+e.position[0],+e.position[1]],
                 city: closestCity

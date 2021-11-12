@@ -10,13 +10,14 @@ export default props => {
   const width = viewport.width;
   const height = viewport.height;
   //const point = data.map(d => viewport.project(d.position));
-  
+  let startTime = new Date()
   const point = data.map(d => viewport.project(d.position));
-  
+  let mapTime = new Date()
   const delau = Delaunay.from(point)
  
   const vor = delau.voronoi([0,0,width,height])
   const it = vor.cellPolygons();
+  let voronoiTime = new Date()
   let res = it.next()
  
   const kdt = new kdTree([], (a,b)=>Math.sqrt(Math.pow(a.lat-b.lat,2)+Math.pow(a.lng-b.lng,2)), ["lat","lng"])
@@ -26,10 +27,11 @@ export default props => {
     let entry = {
       lng: nPos[0],
       lat: nPos[1],
-      location: e.country
+      location: e.city
     }
     kdt.insert(entry)
   });
+  let kdTreeTime = new Date()
   //console.log(kdt)
   const tree = new BinarySearchTree()
   let lines = []
@@ -59,6 +61,11 @@ export default props => {
       
     });*/
   }
+  let searchTime = new Date()
+  console.log("Map Time: " + (mapTime-startTime)/1000)
+  console.log("Voronoi Time: " + (voronoiTime-mapTime)/1000)
+  console.log("KDTree Time: " + (kdTreeTime-voronoiTime)/1000)
+  console.log("search Time: " + (searchTime-kdTreeTime)/1000)
   //const polygons = Array.from(vor.cellPolygons());
   //console.log(lines.length)
   const pathGroupEl = useRef(null);
