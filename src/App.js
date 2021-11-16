@@ -187,28 +187,28 @@ export default () => {
         preventStyleDiffing={false}
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
       >
+        
+        <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100}/>
+        
+        
         <DeckGL 
-          layers={renderLayers({
+          layers={[renderLayers({
             data: data,
             color: [0, 0, 255],
             size: 5,
             opacity: 0.5
-          })}
-          initialViewState={viewport}
-          controller={true}
-        />
-        <DeckGL 
-          layers={renderLayers({
+          }),
+          renderLayers({
             data: hotelData,
             color: [255, 0, 0],
             size: 1,
             opacity: 0.5
-          })}
+          })]}
+          
           initialViewState={viewport}
           controller={true}
+          getTooltip= {({object}) => object && `${object.country} \n ${object.CityName}`}
         />
-        <Voronoi3 viewport={viewport} data={processedData}/>
-        <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100}/>
       </MapGL>
     </div>
   );

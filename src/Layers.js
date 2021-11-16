@@ -13,6 +13,7 @@ export default props => {
       radiusMinPixels: size,
       radiusMaxPixels: 1000,
       lineWidthMinPixels: 1,
+      pickable: true,
       getRadius: d => Math.sqrt(d.exits),
       getFillColor: color,
       getLineColor: color,
