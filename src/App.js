@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DeckGL, { WebMercatorViewport } from "deck.gl";
 import MapGL, { _useMapControl as useMapControl}  from 'react-map-gl';
 import renderLayers from "./Layers.js";
+import { CountryFinder } from "./algorithms/CountryFinder.js";
 import Voronoi from "./voronoi.js";
 import Voronoi2 from "./voronoi2.js";
 import Voronoi3 from "./voronoi3.js";
@@ -57,9 +58,14 @@ function CustomMarker(props) {
 export default () => {
   
   
-  const [data, setData] = useState({});
-  const [hotelData, setHotelData] = useState({})
+  const [data, setData] = useState({value:[]});
+  const [hotelData, setHotelData] = useState({value:[]})
+  const [countryHotelData, setCountryHotelData] = useState({value:[]})
+  const [countryCityData, setCountryCityData] = useState({value:[]})
+  
   const [processedData, setProcData] = useState({})
+  const [posToCountry, setPosToCountry] = useState({})
+  const [curCountry, setCurCountry] = useState({})
   const [sliderProps, setSliderProps] = useState({
     value: 20,
     handleChange: (event, newValue)=>{
@@ -137,6 +143,7 @@ export default () => {
       });
       console.log("GOT HERE");
       setHotelData(points);
+      setPosToCountry(new CountryFinder(points))
     };
     
     fetchData()
@@ -145,9 +152,18 @@ export default () => {
   }, []);
 
   useEffect(()=>{
-    let procData = ClosestCity.Process(data, hotelData)
+    let procData = ClosestCity.Process(countryCityData, countryHotelData)
     setProcData(procData)
-  },[data,hotelData]);
+  },[countryCityData,countryHotelData]);
+
+  useEffect(()=>{
+    try{
+      let filteredHotels = hotelData.filter(e=>e.country === curCountry)
+      let filteredCities = data.filter(e=>e.country === curCountry)
+      setCountryCityData(filteredCities)
+      setCountryHotelData(filteredHotels)
+    }catch{}
+  },[curCountry])
 
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
@@ -161,6 +177,16 @@ export default () => {
       bearing: 0,
     })
   );
+  useEffect(()=>{
+    try{
+      //console.log(curCountry)  
+    let position = [viewport.longitude, viewport.latitude]
+    let country = posToCountry.query(position)
+    if(country !== curCountry){
+      setCurCountry(country)
+    }
+    }catch {}
+  },[viewport])
 
   //resize
   useEffect(() => {
@@ -188,18 +214,18 @@ export default () => {
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
       >
         
-        <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100}/>
+        <Voronoi3 viewport={viewport} data={processedData} />
         
         
         <DeckGL 
           layers={[renderLayers({
-            data: data,
+            data: countryCityData,
             color: [0, 0, 255],
             size: 5,
             opacity: 0.5
           }),
           renderLayers({
-            data: hotelData,
+            data: processedData,
             color: [255, 0, 0],
             size: 1,
             opacity: 0.5

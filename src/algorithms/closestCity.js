@@ -20,7 +20,8 @@ export class ClosestCity{
             let closestCity = kdt.nearest({lng: e.position[0],lat: e.position[1]},1)[0][0].city
             let entry = {
                 position: [+e.position[0],+e.position[1]],
-                city: closestCity
+                CityName: closestCity,
+                country: e.country
             }
             outData.push(entry)
         })}

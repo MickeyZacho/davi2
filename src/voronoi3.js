@@ -27,7 +27,7 @@ export default props => {
     let entry = {
       lng: nPos[0],
       lat: nPos[1],
-      location: e.city
+      location: e.CityName
     }
     kdt.insert(entry)
   });
@@ -62,10 +62,10 @@ export default props => {
     });*/
   }
   let searchTime = new Date()
-  console.log("Map Time: " + (mapTime-startTime)/1000)
+  /*console.log("Map Time: " + (mapTime-startTime)/1000)
   console.log("Voronoi Time: " + (voronoiTime-mapTime)/1000)
   console.log("KDTree Time: " + (kdTreeTime-voronoiTime)/1000)
-  console.log("search Time: " + (searchTime-kdTreeTime)/1000)
+  console.log("search Time: " + (searchTime-kdTreeTime)/1000)*/
   //const polygons = Array.from(vor.cellPolygons());
   //console.log(lines.length)
   const pathGroupEl = useRef(null);
