@@ -203,12 +203,13 @@ export default () => {
           initialViewState={viewport}
           controller={true}
         />
-        <Voronoi3 viewport={viewport} data={processedData}/>
         <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100}/>
         <CustomMarker longitude={-122.45} latitude={37.78} cityname={"yo mama"} />
       </MapGL>
     </div>
   );
+  /*<Voronoi3 viewport={viewport} data={processedData}/>
+        */
   //<Voronoi3 viewport={viewport} data={data}/>
   // <div className="bg-gray-400">
   //       <Box sx={{
