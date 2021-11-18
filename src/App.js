@@ -145,7 +145,7 @@ export default () => {
       setHotelData(points);
       setPosToCountry(new CountryFinder(points))
     };
-    const fetchData3 = async () => {
+    /*const fetchData3 = async () => {
       const countries = ["Denmark", "Sweden", "Norway", "Hong Kong", "Singapore", "Liechtenstein", "Luxembourg", "Iceland", "Turkey", "Poland", "Finland", "Netherlands", "Greece", "Germany", "United States", "United Kingdom", "Ireland", "France", "Spain", "Portugal", "Korea, South", "China", "Indonesia", "Belgium", "Italy", "Austria", "Slovakia", "Hungary", "Romania", "Moldova", "Serbia", "Bosnia And Herzegovina", "Slovenia", "Czechia", "Switzerland", "Macedonia", "Albania","Bulgaria", "Kosovo", "Croatia", "Ukraine", "Belarus", "Lithuania", "Latvia", "Estonia", "Georgia", "Japan", "Thailand", "Taiwan", "Vietnam", "Philippines", "Romania", "Malaysia", "India", "Canada", "Cambodia", "Laos"]
       let result = []
       var counter = 0;
@@ -171,7 +171,7 @@ export default () => {
       console.log("GOT HERE");
       setSecondData(finalpoints);
     };
-    fetchData3()
+    fetchData3()*/
     fetchData()
     fetchData2()
     
@@ -241,8 +241,8 @@ export default () => {
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
       >
         <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
-        <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100} colorString={"blue"}/>
-        <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100} colorString={"red"}/>
+        <Voronoi3 viewport={viewport} data={processedData} opacity={sliderProps.value / 100} colorString={"blue"}/>
+        <Voronoi3 viewport={viewport} data={data} opacity={sliderProps.value / 100} colorString={"red"}/>
         </svg>
         
         <DeckGL 

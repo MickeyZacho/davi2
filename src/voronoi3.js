@@ -4,7 +4,7 @@ import { select } from "d3-selection";
 import {BinarySearchTree} from "./SearchTree.js"
 import { kdTree } from "kd-tree-javascript"
 export default props => {
-  const { viewport, data } = props;
+  const { viewport, data, opacity, colorString  } = props;
 
   if (!data.map) return null;
   const width = viewport.width;
@@ -83,8 +83,8 @@ export default props => {
       .enter()
       .append("path")
       .attr("class", "cell")
-      .attr("fill", "none")
-      .attr("stroke", "black");
+      .attr("stroke", colorString)
+      .attr("opacity", opacity);
 
     selected.merge(enter).attr("d", d => {
       //console.log(d)
