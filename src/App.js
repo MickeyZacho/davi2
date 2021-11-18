@@ -59,6 +59,7 @@ export default () => {
   
   const [data, setData] = useState({});
   const [hotelData, setHotelData] = useState({})
+  const [secondData, setSecondData] = useState({});
   const [processedData, setProcData] = useState({})
   const [sliderProps, setSliderProps] = useState({
     value: 20,
@@ -138,9 +139,36 @@ export default () => {
       console.log("GOT HERE");
       setHotelData(points);
     };
-    
+    const fetchData3 = async () => {
+      const countries = ["Denmark", "Sweden", "Norway", "Hong Kong", "Singapore", "Liechtenstein", "Luxembourg", "Iceland", "Turkey", "Poland", "Finland", "Netherlands", "Greece", "Germany", "United States", "United Kingdom", "Ireland", "France", "Spain", "Portugal", "Korea, South", "China", "Indonesia", "Belgium", "Italy", "Austria", "Slovakia", "Hungary", "Romania", "Moldova", "Serbia", "Bosnia And Herzegovina", "Slovenia", "Czechia", "Switzerland", "Macedonia", "Albania","Bulgaria", "Kosovo", "Croatia", "Ukraine", "Belarus", "Lithuania", "Latvia", "Estonia", "Georgia", "Japan", "Thailand", "Taiwan", "Vietnam", "Philippines", "Romania", "Malaysia", "India", "Canada", "Cambodia", "Laos"]
+      let result = []
+      var counter = 0;
+      for (var i = 0; i < countries.length; i++){
+        await d3.csv(DATA_PATH + countries[i] + ".csv").then((data) => {
+          for (var j = 0; j < data.length; j++) {
+            if(data[j].population < 10000) continue;
+            result.push(data[j])
+            counter++;
+          }
+        });
+      };
+      console.log("counter: " +  counter)
+      const points = result.map(function (d) {
+        return {
+          CityName: d.city,
+          position: [+(+d.lng - 1), +(+d.lat - 1) ],
+          population: d.population,
+          country: d.country
+        };
+      });
+      const finalpoints = points.filter((point) => point.population !== "");
+      console.log("GOT HERE");
+      setSecondData(finalpoints);
+    };
+    fetchData3()
     fetchData()
     fetchData2()
+    
     
   }, []);
 
@@ -187,9 +215,10 @@ export default () => {
         preventStyleDiffing={false}
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
       >
-        
-        <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100}/>
-        
+        <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
+        <Voronoi2 viewport={viewport} data={data} opacity={sliderProps.value / 100} colorString={"blue"}/>
+        <Voronoi2 viewport={viewport} data={secondData} opacity={sliderProps.value / 100} colorString={"red"}/>
+        </svg>
         
         <DeckGL 
           layers={[renderLayers({

@@ -3,7 +3,7 @@ import { Delaunay } from "d3-delaunay";
 import { select } from "d3-selection";
 
 export default props => {
-  const { viewport, data, opacity } = props;
+  const { viewport, data, opacity, colorString } = props;
 
   if (!data.map) return null;
   const width = viewport.width;
@@ -33,7 +33,7 @@ export default props => {
       .append("path")
       .attr("class", "cell")
       .attr("fill", "none")
-      .attr("stroke", "black")
+      .attr("stroke", colorString)
       .attr("opacity", opacity);
 
     selected.merge(enter).attr("d", d => {
@@ -49,8 +49,8 @@ export default props => {
   }, [polygons]);
 
   return (
-    <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
+    
       <g ref={pathGroupEl} />
-    </svg>
+    
   );
 };
