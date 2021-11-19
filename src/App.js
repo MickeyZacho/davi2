@@ -16,6 +16,7 @@ import { TransparencySlider } from "./components/slider.js";
 import Box from '@mui/material/Box';
 import { Slider } from '@mui/material';
 import { textAlign } from "@mui/system";
+import { BiggestInRadius } from "./algorithms/BiggestInRadius.js";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
@@ -65,6 +66,7 @@ export default () => {
   const [countryCityData, setCountryCityData] = useState({value:[]})
   
   const [processedData, setProcData] = useState({})
+  const [processedData2, setProcData2] = useState({})
   const [posToCountry, setPosToCountry] = useState({})
   const [curCountry, setCurCountry] = useState({})
   const [sliderProps, setSliderProps] = useState({
@@ -179,8 +181,10 @@ export default () => {
   }, []);
 
   useEffect(()=>{
-    let procData = ClosestCity.Process(countryCityData, countryHotelData)
+    let procData = BiggestInRadius.Process(countryCityData, countryHotelData)
+    let procData2 = ClosestCity.Process(countryCityData, countryHotelData)
     setProcData(procData)
+    setProcData2(procData2)
   },[countryCityData,countryHotelData]);
 
   useEffect(()=>{
@@ -242,7 +246,7 @@ export default () => {
       >
         <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
         <Voronoi3 viewport={viewport} data={processedData} opacity={sliderProps.value / 100} colorString={"blue"}/>
-        <Voronoi3 viewport={viewport} data={data} opacity={1-sliderProps.value / 100} colorString={"red"}/>
+        <Voronoi3 viewport={viewport} data={processedData2} opacity={1-sliderProps.value / 100} colorString={"red"}/>
         </svg>
         
         <DeckGL 
