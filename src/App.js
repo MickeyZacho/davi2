@@ -15,6 +15,7 @@ import funcVoronoi from "./FuncVoronoi.js";
 import { TransparencySlider } from "./components/slider.js";
 import Box from '@mui/material/Box';
 import { Slider } from '@mui/material';
+import { textAlign } from "@mui/system";
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
@@ -69,11 +70,10 @@ export default () => {
   const [sliderProps, setSliderProps] = useState({
     value: 20,
     handleChange: (event, newValue)=>{
-      //event.persist()
-      console.log("valuechange: "+ event.target.value)
-      setSliderProps({value: newValue})
-      //event.preventDefault()
-      console.log("value after change: "+ sliderProps.value)
+      setSliderProps({
+        handleChange: sliderProps.handleChange,
+        value: newValue,
+      })
     }
   })
   
@@ -242,7 +242,7 @@ export default () => {
       >
         <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
         <Voronoi3 viewport={viewport} data={processedData} opacity={sliderProps.value / 100} colorString={"blue"}/>
-        <Voronoi3 viewport={viewport} data={data} opacity={sliderProps.value / 100} colorString={"red"}/>
+        <Voronoi3 viewport={viewport} data={data} opacity={1-sliderProps.value / 100} colorString={"red"}/>
         </svg>
         
         <DeckGL 
@@ -264,6 +264,19 @@ export default () => {
           getTooltip= {({object}) => object && `${object.country} \n ${object.CityName}`}
         />
       </MapGL>
+      <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
+        <Box sx={{
+          width: 400,
+          height: 25,
+          border: '1px dashed grey',
+          textAlign:"center"
+        }}>
+          <Slider value={sliderProps.value} aria-label="Default" valueLabelDisplay="auto" onChange={sliderProps.handleChange} />
+        </Box>
+      </div>
+      <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
+        <p>Red &lt;--------&gt; Blue</p>
+      </div>
     </div>
   );
   /*<Voronoi3 viewport={viewport} data={processedData}/>
