@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DeckGL, { WebMercatorViewport } from "deck.gl";
+import DeckGL, { WebMercatorViewport, SolidPolygonLayer, PolygonLayer } from "deck.gl";
 import MapGL, { _useMapControl as useMapControl}  from 'react-map-gl';
 import renderLayers from "./Layers.js";
 import { CountryFinder } from "./algorithms/CountryFinder.js";
@@ -17,12 +17,25 @@ import Box from '@mui/material/Box';
 import { Slider } from '@mui/material';
 import { textAlign } from "@mui/system";
 import { BiggestInRadius } from "./algorithms/BiggestInRadius.js";
+import RadioButtons from "./components/algorithmselector.js";
+import { AlgorithmsEnum } from "./Util/Algorithms.js"
+import { red, blue } from '@mui/material/colors';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
 const HOTEL_URL = "./hotelsout/";
 const DATA_PATH = "./CountryPop/";
 
+function algorithmStateSwitch(algorithm){
+  switch(algorithm){
+    case AlgorithmsEnum.BiggestInRadius:
+
+      break;
+    case AlgorithmsEnum.ClosestCity:
+
+      break;
+  }
+}
 function CustomMarker(props) {
   
   //const context = React.useContext(MapContext);
@@ -74,6 +87,24 @@ export default () => {
     handleChange: (event, newValue)=>{
       setSliderProps({
         handleChange: sliderProps.handleChange,
+        value: newValue,
+      })
+    }
+  })
+  const [firstAlgorithmValue, setFirstAlgorithmValue] = useState({
+    value: AlgorithmsEnum.BiggestInRadius,
+    handleChange: (event, newValue)=>{
+      setFirstAlgorithmValue({
+        handleChange: firstAlgorithmValue.handleChange,
+        value: newValue,
+      })
+    }
+  })
+  const [secondAlgorithmValue, setSecondAlgorithmValue] = useState({
+    value: AlgorithmsEnum.ClosestCity,
+    handleChange: (event, newValue)=>{
+      setSecondAlgorithmValue({
+        handleChange: secondAlgorithmValue.handleChange,
         value: newValue,
       })
     }
@@ -234,7 +265,26 @@ export default () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+  const sampleData = [
+            {polygon: [[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]},   // Simple polygon (array of coords)
+            {polygon: [                                            // Complex polygon with one hole
+              [[0, 0], [0, 2], [2, 2], [2, 0], [0, 0]],            // (array of array of coords)
+              [[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]
+            ]}
+          ]; 
+  const layer = new PolygonLayer({
+            id: 'polygon-layer',
+            data: sampleData,
+            stroked: true,
+            filled: true,
+            wireframe: false,
+            extruded: false,
+            lineWidthMinPixels: 1,
+            getPolygon: d => d.polygon,
+            getFillColor: [255, 0, 0, 20],
+            getLineColor: [255, 0, 0],
+            getLineWidth: 1,
+          })
   return (
     <div>
       <MapGL
@@ -259,28 +309,32 @@ export default () => {
           renderLayers({
             data: processedData,
             color: [255, 0, 0],
-            size: 1,
+            size: 2,
             opacity: 0.5
-          })]}
+          }),
+          layer]}
           
           initialViewState={viewport}
           controller={true}
           getTooltip= {({object}) => object && `${object.country} \n ${object.CityName}`}
         />
       </MapGL>
+      <div>
       <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
         <Box sx={{
-          width: 400,
+          width: 600,
           height: 25,
-          border: '1px dashed grey',
           textAlign:"center"
         }}>
           <Slider value={sliderProps.value} aria-label="Default" valueLabelDisplay="auto" onChange={sliderProps.handleChange} />
         </Box>
       </div>
-      <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
-        <p>Red &lt;--------&gt; Blue</p>
-      </div>
+    <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
+      <RadioButtons buttonColor = {red[800]} title = "First Algorithm" currentValue={firstAlgorithmValue.value} disabledValue = {secondAlgorithmValue.value} changeValue={firstAlgorithmValue.handleChange} startValue = {AlgorithmsEnum.BiggestInRadius}/>
+    <div style={{width: 200}}/>
+      <RadioButtons buttonColor = {blue[800]} title = "Second Algorithm" currentValue={secondAlgorithmValue.value} disabledValue = {firstAlgorithmValue.value} changeValue={secondAlgorithmValue.handleChange} startValue = {AlgorithmsEnum.ClosestCity}/>
+    </div>
+    </div>
     </div>
   );
   /*<Voronoi3 viewport={viewport} data={processedData}/>
