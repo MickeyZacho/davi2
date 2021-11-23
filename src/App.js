@@ -230,7 +230,7 @@ export default () => {
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
       width: window.innerWidth,
-      height: window.innerHeight*0.9,
+      height: window.innerHeight*0.8,
       longitude: -3.2943888952729092,
       latitude: 53.63605986631115,
       zoom: 6,
@@ -257,7 +257,7 @@ export default () => {
         return {
           ...v,
           width: window.innerWidth,
-          height: window.innerHeight*0.9,
+          height: window.innerHeight*0.8,
         };
       });
     };
@@ -286,7 +286,7 @@ export default () => {
             getLineWidth: 1,
           })
   return (
-    <div>
+    <div style={{height: "100vh"}}>
       <MapGL
         {...viewport}
         mapStyle={"mapbox://styles/mapbox/light-v9"}
