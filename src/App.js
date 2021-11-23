@@ -226,11 +226,11 @@ export default () => {
       setCountryHotelData(filteredHotels)
     }catch{}
   },[curCountry])
-
+  const nonMapHeight = 200;
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
       width: window.innerWidth,
-      height: window.innerHeight*0.8,
+      height: window.innerHeight - nonMapHeight,
       longitude: -3.2943888952729092,
       latitude: 53.63605986631115,
       zoom: 6,
@@ -257,7 +257,7 @@ export default () => {
         return {
           ...v,
           width: window.innerWidth,
-          height: window.innerHeight*0.8,
+          height: window.innerHeight - nonMapHeight,
         };
       });
     };
@@ -284,7 +284,8 @@ export default () => {
             getFillColor: [255, 0, 0, 20],
             getLineColor: [255, 0, 0],
             getLineWidth: 1,
-          })
+          }) 
+  
   return (
     <div style={{height: "100vh"}}>
       <MapGL
@@ -321,7 +322,7 @@ export default () => {
       </MapGL>
       <div>
         
-      <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
+      <div style={{display:"flex", justifyContent:"center", alignItems:"center", height: nonMapHeight}}>
       <RadioButtons buttonColor = {red[800]} title = "First Algorithm" currentValue={firstAlgorithmValue.value} disabledValue = {secondAlgorithmValue.value} changeValue={firstAlgorithmValue.handleChange} startValue = {AlgorithmsEnum.BiggestInRadius}/>
       <div style={{width: 50}}/>
         <Box sx={{
