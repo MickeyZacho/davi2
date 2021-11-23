@@ -320,20 +320,41 @@ export default () => {
         />
       </MapGL>
       <div>
+        
       <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
+      <RadioButtons buttonColor = {red[800]} title = "First Algorithm" currentValue={firstAlgorithmValue.value} disabledValue = {secondAlgorithmValue.value} changeValue={firstAlgorithmValue.handleChange} startValue = {AlgorithmsEnum.BiggestInRadius}/>
+      <div style={{width: 50}}/>
         <Box sx={{
           width: 600,
           height: 25,
           textAlign:"center"
         }}>
-          <Slider value={sliderProps.value} aria-label="Default" valueLabelDisplay="auto" onChange={sliderProps.handleChange} />
+          Transparency
+          <Slider 
+            value={sliderProps.value} 
+            aria-label="Default" 
+            onChange={sliderProps.handleChange} 
+            track={false}
+            step = {5}
+            marks={[
+              {
+                value: 25,
+                label: "50%"
+              },
+              {
+                value: 50,
+                label: "100%"
+              },
+              {
+                value: 75,
+                label: "50%"
+              }
+            ]}
+          />
         </Box>
+        <div style={{width: 50}}/>
+        <RadioButtons buttonColor = {blue[800]} title = "Second Algorithm" currentValue={secondAlgorithmValue.value} disabledValue = {firstAlgorithmValue.value} changeValue={secondAlgorithmValue.handleChange} startValue = {AlgorithmsEnum.ClosestCity}/>
       </div>
-    <div style={{display:"flex", justifyContent:"center", alignItems:"center",}}>
-      <RadioButtons buttonColor = {red[800]} title = "First Algorithm" currentValue={firstAlgorithmValue.value} disabledValue = {secondAlgorithmValue.value} changeValue={firstAlgorithmValue.handleChange} startValue = {AlgorithmsEnum.BiggestInRadius}/>
-    <div style={{width: 200}}/>
-      <RadioButtons buttonColor = {blue[800]} title = "Second Algorithm" currentValue={secondAlgorithmValue.value} disabledValue = {firstAlgorithmValue.value} changeValue={secondAlgorithmValue.handleChange} startValue = {AlgorithmsEnum.ClosestCity}/>
-    </div>
     </div>
     </div>
   );

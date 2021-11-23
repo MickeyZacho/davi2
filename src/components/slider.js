@@ -13,7 +13,12 @@ export function TransparencySlider(){
                 height: 25,
                 border: '1px dashed grey',
             }}>
-                <Slider defaultValue={50} aria-label="Default" valueLabelDisplay="auto" />
+                <Slider 
+                    defaultValue={50} 
+                    aria-label="Default" 
+                    valueLabelDisplay="auto" 
+                    track={false}
+                />
             </Box>
         </div>
     );
