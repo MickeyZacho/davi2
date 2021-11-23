@@ -24,39 +24,20 @@ export default props => {
     const Buttons = () => {
         let tempArray = []
         for(let item in AlgorithmsEnum){
-            if(AlgorithmsEnum[item] == disabledValue)
-            {
-                tempArray.push(<FormControlLabel 
-                    value={AlgorithmsEnum[item]} 
-                    control={<Radio
-                        {...controlProps(AlgorithmsEnum[item])}
-                        sx={{
+            tempArray.push(<FormControlLabel 
+                value={AlgorithmsEnum[item]} 
+                control={<Radio
+                    {...controlProps(AlgorithmsEnum[item])}
+                    sx={{
+                    color: buttonColor,
+                    '&.Mui-checked': {
                         color: buttonColor,
-                        '&.Mui-checked': {
-                            color: buttonColor,
-                        },
-                        }}
-                    />} 
-                    disabled
-                    label = {AlgorithmsEnum[item]}
-                />)
-            }
-            else
-            {
-                tempArray.push(<FormControlLabel 
-                    value={AlgorithmsEnum[item]} 
-                    control={<Radio
-                        {...controlProps(AlgorithmsEnum[item])}
-                        sx={{
-                        color: buttonColor,
-                        '&.Mui-checked': {
-                            color: buttonColor,
-                        },
-                        }}
-                    />} 
-                    label = {AlgorithmsEnum[item]}
-                />)
-            }
+                    },
+                    }}
+                />} 
+                disabled = {AlgorithmsEnum[item] == disabledValue}
+                label = {AlgorithmsEnum[item]}
+            />)
         }
         return tempArray
     }

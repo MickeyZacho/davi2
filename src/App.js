@@ -226,7 +226,8 @@ export default () => {
       setCountryHotelData(filteredHotels)
     }catch{}
   },[curCountry])
-  const nonMapHeight = 200;
+  // The height of the bottom part of the visualization scales lineary with how many algorithms exists in the enum + 50 because of the title
+  const nonMapHeight = Object.keys(AlgorithmsEnum).length * 50 + 50;
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
       width: window.innerWidth,
