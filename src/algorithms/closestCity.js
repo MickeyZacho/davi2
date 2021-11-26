@@ -1,6 +1,6 @@
-
-
 import { kdTree } from "kd-tree-javascript"
+import { FormControl, FormControlLabel, FormLabel, Checkbox, Slider, FormGroup } from '@mui/material';
+import * as React from 'react';
 
 export class ClosestCity{
     static Process(cityData, hotelData) {
@@ -31,4 +31,18 @@ export class ClosestCity{
         console.log(outData[0])
         return outData
     }
+
+    static getParameters() {
+        return (
+            <div style={{width: 500, justifyContent:"center", alignItems:"center"}}>
+                <h3>Biggest in Radius Parameters</h3>
+                <Slider />
+                <FormGroup>
+                    <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
+                    <FormControlLabel disabled control={<Checkbox />} label="Disabled" />
+                </FormGroup>
+            </div>
+        )
+    }
 }
+

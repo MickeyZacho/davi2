@@ -7,7 +7,7 @@ import { red, blue } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 
 export default props => {
-    const { buttonColor, title, currentValue, disabledValue, changeValue, startValue } = props;
+    const { buttonColor, title, disabledValue, changeValue, startValue } = props;
     const [selectedValue, setSelectedValue] = React.useState(startValue);
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
@@ -49,4 +49,3 @@ export default props => {
         </FormControl>
     )
 }
-

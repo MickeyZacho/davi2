@@ -6,69 +6,20 @@ import { CountryFinder } from "./algorithms/CountryFinder.js";
 import Voronoi from "./voronoi.js";
 import Voronoi2 from "./voronoi2.js";
 import Voronoi3 from "./voronoi3.js";
-import FuncVoronoi from "./FuncVoronoi.js";
-import { apiBase } from "./api.js";
 import { ClosestCity } from "./algorithms/closestCity.js";
-import { csv } from "d3-fetch";
 import * as d3 from "d3";
-import funcVoronoi from "./FuncVoronoi.js";
-import { TransparencySlider } from "./components/slider.js";
 import Box from '@mui/material/Box';
 import { Slider } from '@mui/material';
-import { textAlign } from "@mui/system";
 import { BiggestInRadius } from "./algorithms/BiggestInRadius.js";
 import RadioButtons from "./components/algorithmselector.js";
 import { AlgorithmsEnum } from "./Util/Algorithms.js"
 import { red, blue } from '@mui/material/colors';
+import Algorithms from './Util/Algorithms.js'
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
 const HOTEL_URL = "./hotelsout/";
 const DATA_PATH = "./CountryPop/";
-
-function algorithmStateSwitch(algorithm){
-  switch(algorithm){
-    case AlgorithmsEnum.BiggestInRadius:
-
-      break;
-    case AlgorithmsEnum.ClosestCity:
-
-      break;
-  }
-}
-function CustomMarker(props) {
-  
-  //const context = React.useContext(MapContext);
-  
-  const {longitude, latitude, cityname} = props;
-
-  const [string, setString] = React.useState(0);
-
-  const {context, containerRef} = useMapControl({
-    onDragStart: evt => {
-      // prevent the base map from panning
-      evt.stopPropagation();
-      
-    },
-    onClick: evt => {
-      if (evt.type === 'click') {
-        setString("farvel")
-      }
-    }
-  });
-  const [x, y] = context.viewport.project([longitude, latitude]);
-  const markerStyle = {
-    position: 'absolute',
-    background: /*'#fff'*/'',
-    left: x,
-    top: y
-  };
-  return (
-    <div ref={containerRef} style={markerStyle} >
-      {string}
-    </div>
-  );
-  }
 
 export default () => {
   
@@ -286,6 +237,7 @@ export default () => {
             getLineColor: [255, 0, 0],
             getLineWidth: 1,
           }) 
+
   
   return (
     <div style={{height: "100vh"}}>
@@ -324,10 +276,13 @@ export default () => {
       <div>
         
       <div style={{display:"flex", justifyContent:"center", alignItems:"center", height: nonMapHeight}}>
-      <RadioButtons buttonColor = {red[800]} title = "First Algorithm" currentValue={firstAlgorithmValue.value} disabledValue = {secondAlgorithmValue.value} changeValue={firstAlgorithmValue.handleChange} startValue = {AlgorithmsEnum.BiggestInRadius}/>
+      <div style={{width: 50}}/>
+      <Algorithms.parameterStateSwitch algorithm={firstAlgorithmValue.value} />
+      <div style={{width: 50}}/>
+      <RadioButtons buttonColor = {red[800]} title = "First Algorithm" changeValue={firstAlgorithmValue.handleChange} startValue={firstAlgorithmValue.value} />
       <div style={{width: 50}}/>
         <Box sx={{
-          width: 600,
+          width: 1000,
           height: 25,
           textAlign:"center"
         }}>
@@ -355,7 +310,10 @@ export default () => {
           />
         </Box>
         <div style={{width: 50}}/>
-        <RadioButtons buttonColor = {blue[800]} title = "Second Algorithm" currentValue={secondAlgorithmValue.value} disabledValue = {firstAlgorithmValue.value} changeValue={secondAlgorithmValue.handleChange} startValue = {AlgorithmsEnum.ClosestCity}/>
+        <RadioButtons buttonColor = {blue[800]} title = "Second Algorithm" changeValue={secondAlgorithmValue.handleChange} startValue={secondAlgorithmValue.value} />  
+        <div style={{width: 50}}/>
+        <Algorithms.parameterStateSwitch algorithm={secondAlgorithmValue.value} />
+        <div style={{width: 50}}/>
       </div>
     </div>
     </div>
