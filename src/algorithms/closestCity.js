@@ -35,7 +35,7 @@ export class ClosestCity{
     static getParameters() {
         return (
             <div style={{width: 500, justifyContent:"center", alignItems:"center"}}>
-                <h3>Biggest in Radius Parameters</h3>
+                <h3>Closest City Parameters</h3>
                 <Slider />
                 <FormGroup>
                     <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />

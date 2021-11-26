@@ -399,61 +399,50 @@ export default () => {
           getTooltip= {({object}) => object && `${object.country} \n ${object.CityName}`}
         />
       </MapGL>
+      <div style={{height: 10}} />
       <div>
         
-      <div style={{display:"flex", justifyContent:"center", alignItems:"center", height: nonMapHeight}}>
-      <div style={{width: 50}}/>
-      <Algorithms.parameterStateSwitch algorithm={firstAlgorithmValue.value} />
-      <div style={{width: 50}}/>
-      <RadioButtons buttonColor = {red[800]} title = "First Algorithm" changeValue={firstAlgorithmValue.handleChange} startValue={firstAlgorithmValue.value} />
-      <div style={{width: 50}}/>
-        <Box sx={{
-          width: 1000,
-          height: 25,
-          textAlign:"center"
-        }}>
-          Transparency
-          <Slider 
-            value={sliderProps.value} 
-            aria-label="Default" 
-            onChange={sliderProps.handleChange} 
-            track={false}
-            step = {5}
-            marks={[
-              {
-                value: 25,
-                label: "50%"
-              },
-              {
-                value: 50,
-                label: "100%"
-              },
-              {
-                value: 75,
-                label: "50%"
-              }
-            ]}
-          />
-        </Box>
+        <div style={{display:"flex", justifyContent:"center", height: nonMapHeight}}>
         <div style={{width: 50}}/>
-        <RadioButtons buttonColor = {blue[800]} title = "Second Algorithm" changeValue={secondAlgorithmValue.handleChange} startValue={secondAlgorithmValue.value} />  
+        <Algorithms.parameterStateSwitch algorithm={firstAlgorithmValue.value} />
         <div style={{width: 50}}/>
-        <Algorithms.parameterStateSwitch algorithm={secondAlgorithmValue.value} />
+        <RadioButtons buttonColor = {red[800]} title = "First Algorithm" changeValue={firstAlgorithmValue.handleChange} startValue={firstAlgorithmValue.value} />
         <div style={{width: 50}}/>
+          <Box sx={{
+            width: 800,
+            height: 25,
+            textAlign:"center"
+          }}>
+            Transparency
+            <Slider 
+              value={sliderProps.value} 
+              aria-label="Default" 
+              onChange={sliderProps.handleChange} 
+              track={false}
+              step = {5}
+              marks={[
+                {
+                  value: 25,
+                  label: "50%"
+                },
+                {
+                  value: 50,
+                  label: "100%"
+                },
+                {
+                  value: 75,
+                  label: "50%"
+                }
+              ]}
+            />
+          </Box>
+          <div style={{width: 50}}/>
+          <RadioButtons buttonColor = {blue[800]} title = "Second Algorithm" changeValue={secondAlgorithmValue.handleChange} startValue={secondAlgorithmValue.value} />  
+          <div style={{width: 50}}/>
+          <Algorithms.parameterStateSwitch algorithm={secondAlgorithmValue.value} />
+          <div style={{width: 50}}/>
+        </div>
       </div>
     </div>
-    </div>
   );
-  /*<Voronoi3 viewport={viewport} data={processedData}/>
-        */
-  //<Voronoi3 viewport={viewport} data={data}/>
-  // <div className="bg-gray-400">
-  //       <Box sx={{
-  //         width: window.innerWidth*0.5,
-  //         height: 25,
-  //         border: '1px dashed grey',
-  //       }}>
-  //         <Slider value={sliderProps.value} aria-label="Default" valueLabelDisplay="auto" onChange={sliderProps.handleChange} />
-  //       </Box>
-  //     </div>
 };  

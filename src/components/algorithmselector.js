@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import App from "../App";
 import { AlgorithmsEnum } from "../Util/Algorithms.js"
-import { FormControl, RadioGroup, FormControlLabel, FormLabel } from '@mui/material';
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
-import { red, blue } from '@mui/material/colors';
-import Box from '@mui/material/Box';
 
 export default props => {
-    const { buttonColor, title, disabledValue, changeValue, startValue } = props;
+    const { buttonColor, title, changeValue, startValue } = props;
     const [selectedValue, setSelectedValue] = React.useState(startValue);
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
@@ -18,7 +18,7 @@ export default props => {
         checked: selectedValue === item,
         onChange: handleChange,
         value: item,
-        name: 'color-radio-button-demo',
+        name: 'size-radio-button-demo',
         inputProps: { 'aria-label': item },
     });
     const Buttons = () => {
@@ -29,23 +29,25 @@ export default props => {
                 control={<Radio
                     {...controlProps(AlgorithmsEnum[item])}
                     sx={{
-                    color: buttonColor,
-                    '&.Mui-checked': {
                         color: buttonColor,
+                        '&.Mui-checked': {
+                            color: buttonColor,
                     },
+                    
                     }}
                 />} 
-                disabled = {AlgorithmsEnum[item] == disabledValue}
                 label = {AlgorithmsEnum[item]}
+                key = {AlgorithmsEnum[item]}
             />)
         }
         return tempArray
     }
     return (
-        
+        <div style={{width: 500}}>
         <FormControl component="fieldset">
             <FormLabel component="legend">{title}</FormLabel>
                 <Buttons />
         </FormControl>
+        </div>
     )
 }
