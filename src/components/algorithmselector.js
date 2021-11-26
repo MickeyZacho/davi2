@@ -33,11 +33,9 @@ export default props => {
                         '&.Mui-checked': {
                             color: buttonColor,
                     },
-                    
                     }}
                 />} 
                 label = {AlgorithmsEnum[item]}
-                key = {AlgorithmsEnum[item]}
             />)
         }
         return tempArray

@@ -3,7 +3,7 @@ import { BiggestInRadius } from "../algorithms/BiggestInRadius.js";
 
 export const AlgorithmsEnum = {
   BiggestInRadius: "Biggest in Radius", 
-  ClosestCity: "Closest City"
+  ClosestCity: "Closest City",
 }
 
 export default class Algorithms {

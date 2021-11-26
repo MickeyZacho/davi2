@@ -23,6 +23,7 @@ import { AlgorithmsEnum } from "./Util/Algorithms.js"
 import { red, blue } from '@mui/material/colors';
 import Algorithms from './Util/Algorithms.js'
 
+
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
 const HOTEL_URL = "./hotelsout/";
@@ -364,9 +365,9 @@ export default () => {
             getLineWidth: 1,
           }) 
 
-  
   return (
     <div style={{height: "100vh"}}>
+      <div>
       <MapGL
         {...viewport}
         mapStyle={"mapbox://styles/mapbox/light-v9"}
@@ -399,8 +400,8 @@ export default () => {
           getTooltip= {({object}) => object && `${object.country} \n ${object.CityName}`}
         />
       </MapGL>
+      </div>
       <div style={{height: 10}} />
-      <div>
         
         <div style={{display:"flex", justifyContent:"center", height: nonMapHeight}}>
         <div style={{width: 50}}/>
@@ -416,7 +417,7 @@ export default () => {
             Transparency
             <Slider 
               value={sliderProps.value} 
-              aria-label="Default" 
+              aria-label="Slider" 
               onChange={sliderProps.handleChange} 
               track={false}
               step = {5}
@@ -442,7 +443,7 @@ export default () => {
           <Algorithms.parameterStateSwitch algorithm={secondAlgorithmValue.value} />
           <div style={{width: 50}}/>
         </div>
+        
       </div>
-    </div>
   );
 };  

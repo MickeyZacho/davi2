@@ -9,7 +9,6 @@ body {
 }
 path {
   stroke-width: 1;
-  fill: transparent;
   pointer-events: all;
 }
 path:hover{
