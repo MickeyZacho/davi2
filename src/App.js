@@ -3,9 +3,16 @@ import DeckGL, { WebMercatorViewport, SolidPolygonLayer, PolygonLayer } from "de
 import MapGL, { _useMapControl as useMapControl}  from 'react-map-gl';
 import renderLayers from "./Layers.js";
 import { CountryFinder } from "./algorithms/CountryFinder.js";
+import { Delaunay } from "d3-delaunay";
+import {BinarySearchTree} from "./SearchTree.js"
+import { kdTree } from "kd-tree-javascript"
 import Voronoi from "./voronoi.js";
 import Voronoi2 from "./voronoi2.js";
 import Voronoi3 from "./voronoi3.js";
+import Voronoi4 from "./voronoi4.js";
+import Voronoi5 from "./voronoi5.js";
+import FuncVoronoi from "./FuncVoronoi.js";
+import { apiBase } from "./api.js";
 import { ClosestCity } from "./algorithms/closestCity.js";
 import * as d3 from "d3";
 import Box from '@mui/material/Box';
@@ -31,6 +38,10 @@ export default () => {
   
   const [processedData, setProcData] = useState({})
   const [processedData2, setProcData2] = useState({})
+  const [vorData, setVorData] = useState({})
+  const [vorData2, setVorData2] = useState({})
+  const [polData, setPolData] = useState({})
+  const [polData2, setPolData2] = useState({})
   const [posToCountry, setPosToCountry] = useState({})
   const [curCountry, setCurCountry] = useState({})
   const [sliderProps, setSliderProps] = useState({
@@ -163,10 +174,122 @@ export default () => {
   }, []);
 
   useEffect(()=>{
+    
+    function calculateVor(data){
+      //const point = data.map(d => d.position);
+      const delau = Delaunay.from(data, (d)=> d.position[0], (d)=>d.position[1])
+    
+      const vor = delau.voronoi([-179,-89,179,89])
+      
+      const it = vor.cellPolygons();
+      let res = it.next()
+    
+      const kdt = new kdTree([], (a,b)=>Math.sqrt(Math.pow(a.lat-b.lat,2)+Math.pow(a.lng-b.lng,2)), ["lat","lng"])
+      //console.log(kdt)
+      data.forEach(e => {
+        let nPos = e.position
+        let entry = {
+          lng: nPos[0],
+          lat: nPos[1],
+          cityName: e.CityName,
+          country: e.country
+        }
+        kdt.insert(entry)
+      });
+      const tree = new BinarySearchTree()
+      let cityLines = new Map();
+
+      while(!res.done){
+        //For every cell in the voronoi, calculate the corresponding hotel, by looking in the kd-tree of hotels
+        let averageX = res.value.reduce((acc, c) => acc+(c[0]), 0)/res.value.length
+        let averageY = res.value.reduce((acc, c) => acc+(c[1]), 0)/res.value.length
+
+        let near = kdt.nearest({lng: averageX, lat: averageY}, 1)[0][0] //returns a hotel data point {lng, lat, cityName, country}
+
+        for(let i = 0; i < res.value.length; i++){
+          //Calculate all lines drawn, for a cell, including the last element to the first element
+          let posA = res.value[i]
+          let posB = res.value[((i+1) % res.value.length)]
+          //Create a path object, with the corresponding city and country of the hotel
+          let path = {a: posA, b: posB, cityName: near.cityName, country: near.country}
+          //Check for wierd case, where start and end position is the same
+          if(posA[0]===posB[0] && posA[1]===posB[1]) continue
+          //Check if path is on the border
+          if((posA[0] === 179 && posB[0] === 179) || (posA[0]===-179 && posB[0]===-179) || (posA[1] === 89 && posB[1] === 89) || (posA[1]===-89 && posB[1]===-89)){
+            
+            if(cityLines.get( near.cityName)===undefined) cityLines.set( near.cityName, [])
+            cityLines.get(near.cityName).push({a: posA, b: posB, sameCountry: true})
+            continue
+          }
+          //Identify a path by the sum of the lat and long values, hopefully being unique, for faster search, and to equal a path from a to b and from b to a
+          let a = posA[0]+posA[1]
+          let b = posB[0]+posB[1]
+          let nPath = tree.insert(a+b, path)
+          //When inserting, we return null if there wasn't an already existing element, otherwise we return the already existing, meaning we found a match
+          //Check if the city of the found path is different from the current cell, otherwise we don't want to draw the path
+          
+          if(nPath === null || nPath.cityName === near.cityName) continue  
+          //If city path array not initialised, initialize them
+          if(cityLines.get( near.cityName)===undefined) cityLines.set( near.cityName, [])
+          if(cityLines.get(nPath.cityName)===undefined) cityLines.set(nPath.cityName, [])
+          //Add the path to the cityLines, and check if the line splits two countries
+          cityLines.get(near.cityName).push({a: posA, b: posB, sameCountry: near.country === nPath.country})
+          cityLines.get(nPath.cityName).push({a: nPath.a, b: nPath.b, sameCountry: near.country == nPath.country})
+          
+        }
+        res = it.next()
+      }
+      return cityLines
+    }
+    function calculatePolygons(data){
+      let polygonMap = new Map()
+      
+      data.forEach((value, key)=>{
+        console.log(key)
+        //if(key === "No City") return []
+        let entry = value[0]
+        value.splice(value.indexOf(entry),1)
+        let polyCount = 0
+        let currentPos = entry.b
+        let path = []
+        path.push([entry.a, entry.b])
+        do{
+          let next = value.find((e)=>{return e.a[0] === currentPos[0] && e.a[1] === currentPos[1]})
+          
+          if(next !== undefined) {
+            value.splice(value.indexOf(next),1)
+            path[polyCount].push(next.b)
+            currentPos = next.b
+          }else {
+            console.log(value)
+            //path[polyCount].push(entry.a)
+            entry = value[0]
+            value.splice(value.indexOf(entry),1)
+            currentPos = entry.b
+            path.push([entry.a, entry.b])
+            polyCount += 1
+          }
+        }while(value.length>0)
+        
+        console.log(path)
+        polygonMap.set(key, path)
+      })
+      return polygonMap
+    }
+    
     let procData = BiggestInRadius.Process(countryCityData, countryHotelData)
     let procData2 = ClosestCity.Process(countryCityData, countryHotelData)
+    let vor1 = calculateVor(procData)
+    let vor2 = calculateVor(procData2)
+    let pol1 = calculatePolygons(vor1)
+    let pol2 = calculatePolygons(vor2)
+    
     setProcData(procData)
     setProcData2(procData2)
+    setVorData(vor1)
+    setVorData2(vor2)
+    setPolData(pol1)
+    setPolData2(pol2)
   },[countryCityData,countryHotelData]);
 
   useEffect(()=>{
@@ -176,6 +299,7 @@ export default () => {
       setCountryCityData(filteredCities)
       setCountryHotelData(filteredHotels)
     }catch{}
+    
   },[curCountry])
   // The height of the bottom part of the visualization scales lineary with how many algorithms exists in the enum + 50 because of the title
   const nonMapHeight = Object.keys(AlgorithmsEnum).length * 50 + 50;
@@ -200,6 +324,8 @@ export default () => {
       setCurCountry(country)
     }
     }catch {}
+    
+    console.log("Check country This is run")
   },[viewport])
 
   //resize
@@ -249,8 +375,8 @@ export default () => {
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
       >
         <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
-        <Voronoi3 viewport={viewport} data={processedData} opacity={sliderProps.value / 100} colorString={"blue"}/>
-        <Voronoi3 viewport={viewport} data={processedData2} opacity={1-sliderProps.value / 100} colorString={"red"}/>
+        <Voronoi5 viewport={viewport} data={polData} opacity={sliderProps.value / 100} colorString={"blue"}/>
+        <Voronoi5 viewport={viewport} data={polData2} opacity={1-sliderProps.value / 100} colorString={"red"}/>
         </svg>
         
         <DeckGL 
