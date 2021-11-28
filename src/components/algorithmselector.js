@@ -33,6 +33,9 @@ export default props => {
                         '&.Mui-checked': {
                             color: buttonColor,
                     },
+                    '& .MuiSvgIcon-root': {
+            fontSize: 14,
+          },
                     }}
                 />} 
                 label = {AlgorithmsEnum[item]}

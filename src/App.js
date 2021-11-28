@@ -584,6 +584,11 @@ export default () => {
             title="First Algorithm"
             changeValue={firstAlgorithmValue.handleChange}
             startValue={firstAlgorithmValue.value}
+            sx={{
+          '& .MuiSvgIcon-root': {
+            fontSize: 28,
+          },
+        }}
           />
           <Box
             sx={{
