@@ -11,7 +11,7 @@ path {
   stroke-width: 1;
   pointer-events: all;
 }
-path:hover{
+polygon:onHover{
   cursor: pointer;
   fill: red !important;
   stroke: #ff0000 ;

@@ -363,10 +363,21 @@ export default () => {
             getFillColor: [255, 0, 0, 20],
             getLineColor: [255, 0, 0],
             getLineWidth: 1,
+            onHover: info => handleOnHover(info)
           }) 
 
+  function handleOnHover(info)
+  {
+    const {x,y,object} = info;
+    if (object) {
+      let Denmark = document.getElementById(object.CityName);
+      if (Denmark != null) Denmark.style.fill = "green"
+    }
+  }
   return (
+    
     <div style={{height: "100vh"}}>
+      <div id="tooltip" style={{position: 'absolute', zIndex: 1, pointerEvents: 'none'}}/>
       <div>
       <MapGL
         {...viewport}
@@ -393,12 +404,11 @@ export default () => {
             size: 2,
             opacity: 0.5
           }),
-          layer]}
-          
+          layer]} 
           initialViewState={viewport}
           controller={true}
-          getTooltip= {({object}) => object && `${object.country} \n ${object.CityName}`}
-        />
+        >
+        </DeckGL>
       </MapGL>
       </div>
       <div style={{height: 10}} />
