@@ -51,9 +51,10 @@ export class BiggestInRadius{
     
     static getParameters() {
         return (
-            <div style={{width: 500, justifyContent:"center", alignItems:"center"}}>
+            <div style={{width: 500, }}>
                 <h3>Biggest in Radius Parameters</h3>
                 <TextField variant="outlined" label="Radius"/>
+
             </div>
         )
     }
