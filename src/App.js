@@ -544,6 +544,7 @@ export default () => {
           style={{
             position: "absolute",
             width: viewport.width - 100,
+            height: viewport.height,
             bottom: 10,
             display: "flex",
             justifyContent: "center",
@@ -552,7 +553,7 @@ export default () => {
             marginRight: 25,
             marginTop: 10,
             marginBottom: 10,          
-            opacity: 0.8, 
+            opacity: 1, 
             backgroundColor: "white",
             
             borderRadius: "25px",
@@ -562,14 +563,16 @@ export default () => {
         <div
           style={{
             position: "absolute",
-            width: viewport.width - 100,
+            width: viewport.width - 150,
+            height: viewport.height,
             bottom: 10,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             height: nonMapHeight,
             marginLeft: 50,
-            marginRight: 50,
+            marginRight: 10,
+            marginBottom: 20,  
           }}
         >
         
