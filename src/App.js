@@ -547,7 +547,7 @@ export default () => {
             height: viewport.height,
             bottom: 10,
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "space-between",
             height: nonMapHeight,
             marginLeft: 25,
             marginRight: 25,

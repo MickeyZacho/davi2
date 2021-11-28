@@ -50,7 +50,9 @@ export default (props) => {
   };
   return (
     <div style={{ width: 500 }}>
-      <FormControl component="fieldset">
+      <FormControl component="fieldset" sx={{
+          margin: 2,
+      }}>
         <FormLabel component="legend">{<span style={{ fontSize: 'small' }}>{title}</span>}</FormLabel>
         <Buttons />
       </FormControl>
