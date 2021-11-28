@@ -35,11 +35,10 @@ export class ClosestCity{
     static getParameters() {
         return (
             <div style={{width: 500, justifyContent:"center", alignItems:"center"}}>
-                <h3>Closest City Parameters</h3>
-                <Slider />
+                <span style={{ fontSize: 'medium',}}>Closest City Parameters</span>
                 <FormGroup>
-                    <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
-                    <FormControlLabel disabled control={<Checkbox />} label="Disabled" />
+                    <FormControlLabel control={<Checkbox defaultChecked sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }} />} label={<span style={{ fontSize: 'small' }}>{"Label"}</span>} />
+                    <FormControlLabel disabled control={<Checkbox sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }} />} label={<span style={{ fontSize: 'small' }}>{"Disabled"}</span>} />
                 </FormGroup>
             </div>
         )
