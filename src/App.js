@@ -22,6 +22,7 @@ import Box from '@mui/material/Box';
 import { Slider } from '@mui/material';
 import { textAlign } from "@mui/system";
 import { BiggestInRadius } from "./algorithms/BiggestInRadius.js";
+import {PopRadius} from "./algorithms/PopRadius"
 import RadioButtons from "./components/algorithmselector.js";
 import { AlgorithmsEnum } from "./Util/Algorithms.js"
 import { red, blue } from '@mui/material/colors';
@@ -324,8 +325,8 @@ export default () => {
       return polygonMap
     }
     
-    let procData = BiggestInRadius.Process(countryCityData, countryHotelData)
-    let procData2 = ClosestCity.Process(countryCityData, countryHotelData)
+    let procData2 = BiggestInRadius.Process(countryCityData, countryHotelData)
+    let procData = PopRadius.Process(countryCityData, countryHotelData)
     let vor1 = calculateVor(procData)
     let vor2 = calculateVor(procData2)
     let pol1 = calculatePolygons(vor1)
