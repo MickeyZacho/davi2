@@ -344,40 +344,79 @@ export default () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const sampleData = [
-            {polygon: [[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]},   // Simple polygon (array of coords)
-            {polygon: [                                            // Complex polygon with one hole
-              [[0, 0], [0, 2], [2, 2], [2, 0], [0, 0]],            // (array of array of coords)
-              [[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]
-            ]}
-          ]; 
-  const layer = new PolygonLayer({
-            id: 'polygon-layer',
-            data: sampleData,
-            stroked: true,
-            filled: true,
-            wireframe: false,
-            extruded: false,
-            lineWidthMinPixels: 1,
-            getPolygon: d => d.polygon,
-            getFillColor: [255, 0, 0, 20],
-            getLineColor: [255, 0, 0],
-            getLineWidth: 1,
-            onHover: info => handleOnHover(info)
-          }) 
-
-  function handleOnHover(info)
+  const sampleData1 = [
   {
-    const {x,y,object} = info;
-    if (object) {
-      let Denmark = document.getElementById(object.CityName);
-      if (Denmark != null) Denmark.style.fill = "green"
-    }
-  }
+    polygon: [
+      [0, 0],
+      [0, 2],
+      [1, 2],
+      [1, 0],
+      [0, 0],
+    ],
+  },{
+    polygon: [
+      [0, 0],
+      [0, -1],
+      [-1, -1],
+      [-1, 0],
+      [0, 0],
+    ]
+  }];
+  const sampleData2 = [
+    {
+      polygon: [
+        // Complex polygon with one hole
+          [0, 0],
+          [0, 2],
+          [2, 2],
+          [2, 0],
+          [0, 0],
+        ],
+      },{
+        polygon: [
+          // Complex polygon with one hole
+            [0, 0],
+            [0, -2],
+            [2, -2],
+            [2, 0],
+            [0, 0],
+          ]
+    }];
+  const layer1 = new PolygonLayer({
+    id: "polygon-layer",
+    data: sampleData1,
+    stroked: true,
+    filled: true,
+    wireframe: false,
+    extruded: false,
+    lineWidthMinPixels: 1,
+    pickable: true,
+    getPolygon: (d) => d.polygon,
+    getFillColor: [255, 0, 0, 10],
+    getLineColor: [255, 0, 0],
+    getLineWidth: 1,
+    autoHighlight: true,
+    highlightColor: [255, 0, 0, 20],
+  });
+  const layer2 = new PolygonLayer({
+    id: "polygon-layer",
+    data: sampleData2,
+    stroked: true,
+    filled: true,
+    wireframe: false,
+    extruded: false,
+    lineWidthMinPixels: 1,
+    pickable: true,
+    getPolygon: (d) => d.polygon,
+    getFillColor: [0, 0, 255, 10],
+    getLineColor: [0, 0, 255],
+    getLineWidth: 1,
+    autoHighlight: true,
+    highlightColor: [0, 0, 255, 20],
+  });
   return (
     
     <div style={{height: "100vh"}}>
-      <div id="tooltip" style={{position: 'absolute', zIndex: 1, pointerEvents: 'none'}}/>
       <div>
       <MapGL
         {...viewport}
@@ -386,6 +425,7 @@ export default () => {
         preventStyleDiffing={false}
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
       >
+        
         <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
         <Voronoi5 viewport={viewport} data={polData} opacity={sliderProps.value / 100} colorString={"blue"}/>
         <Voronoi5 viewport={viewport} data={polData2} opacity={1-sliderProps.value / 100} colorString={"red"}/>
@@ -403,8 +443,7 @@ export default () => {
             color: [255, 0, 0],
             size: 2,
             opacity: 0.5
-          }),
-          layer]} 
+          }), layer2, layer1]} 
           initialViewState={viewport}
           controller={true}
         >
@@ -453,7 +492,7 @@ export default () => {
           <Algorithms.parameterStateSwitch algorithm={secondAlgorithmValue.value} />
           <div style={{width: 50}}/>
         </div>
-        
+        <div id="tooltip" style={{position: 'absolute', zIndex: 1, pointerEvents: 'none'}}/>
       </div>
   );
 };  
