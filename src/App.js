@@ -402,7 +402,7 @@ export default () => {
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
       width: window.innerWidth,
-      height: window.innerHeight -20,
+      height: window.innerHeight - 20,
       longitude: -3.2943888952729092,
       latitude: 53.63605986631115,
       zoom: 6,
@@ -542,7 +542,43 @@ export default () => {
           initialViewState={viewport}
           controller={true}
         >
-        
+          </DeckGL>
+      </MapGL>
+      <div
+          style={{
+            position: "absolute",
+            width: viewport.width - 100,
+            height: viewport.height,
+            bottom: 10,
+            display: "flex",
+            justifyContent: "space-between",
+            height: nonMapHeight,
+            marginLeft: 25,
+            marginRight: 25,
+            marginTop: 10,
+            marginBottom: 10,          
+            opacity: 1, 
+            backgroundColor: "white",
+            
+            borderRadius: "25px",
+            border: "2px solid #4c768d"
+          }}
+        ></div>
+        <div
+          style={{
+            position: "absolute",
+            width: viewport.width - 150,
+            height: viewport.height,
+            bottom: 10,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: nonMapHeight,
+            marginLeft: 50,
+            marginRight: 10,
+            marginBottom: 20,  
+          }}
+        >
           <Algorithms.parameterStateSwitch
             algorithm={firstAlgorithmValue.value}
           />
@@ -591,9 +627,11 @@ export default () => {
           <Algorithms.parameterStateSwitch
             algorithm={secondAlgorithmValue.value}
           />
+          
+        </div>
         </div>
         <div id="tooltip" style={{position: 'absolute', zIndex: 1, pointerEvents: 'none'}}/>
       </div>
-    </div>
+      
   );
 };
