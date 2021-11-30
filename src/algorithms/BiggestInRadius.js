@@ -52,7 +52,7 @@ export class BiggestInRadius{
     }
 
     
-    static getParameters(setAlgo1) {
+    static getParameters(setAlgo) {
         const [val, setVal] = React.useState(0);
 
         function handleChange(e){
@@ -61,9 +61,9 @@ export class BiggestInRadius{
 
         function handleClick(e){
             e.preventDefault();
-            console.log(document.getElementById("algo1input1").value);
+            console.log(val, document.getElementById("algo1input1").value);
             const tmp = document.getElementById("algo1input1").value;
-            setAlgo1(
+            setAlgo(
                 e,
                 {radius: tmp}
             )

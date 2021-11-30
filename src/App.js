@@ -3,32 +3,21 @@ import DeckGL, {
   WebMercatorViewport,
   SolidPolygonLayer,
   PolygonLayer,
+  HeatmapLayer,
 } from "deck.gl";
 import MapGL, { _useMapControl as useMapControl } from "react-map-gl";
 import renderLayers from "./Layers.js";
 import { CountryFinder } from "./algorithms/CountryFinder.js";
 import { Delaunay } from "d3-delaunay";
-import { BinarySearchTree } from "./SearchTree.js";
 import { kdTree } from "kd-tree-javascript";
-import Voronoi from "./voronoi.js";
-import Voronoi2 from "./voronoi2.js";
-import Voronoi3 from "./voronoi3.js";
-import Voronoi4 from "./voronoi4.js";
-import Voronoi5 from "./voronoi5.js";
-import FuncVoronoi from "./FuncVoronoi.js";
-import { apiBase } from "./api.js";
-import { ClosestCity } from "./algorithms/closestCity.js";
 import * as d3 from "d3";
 import Box from "@mui/material/Box";
 import { Button, Slider } from "@mui/material";
-import { BiggestInRadius } from "./algorithms/BiggestInRadius.js";
 import RadioButtons from "./components/algorithmselector.js";
 import Settings from "./components/sideParameters";
 import { AlgorithmsEnum } from "./Util/Algorithms.js";
 import { red, blue } from "@mui/material/colors";
 import Algorithms from "./Util/Algorithms.js";
-import { PopRadius } from "./algorithms/PopRadius.js";
-
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
@@ -61,7 +50,7 @@ export default () => {
   const [firstAlgorithmValue, setFirstAlgorithmValue] = useState({
     value: AlgorithmsEnum.BiggestInRadius,
     parameters: {radius: 50},
-    handleChange: (event, newParam) => {
+    handleChangeParam: (event, newParam) => {
       setFirstAlgorithmValue((s) => ({
         ...s,
         parameters: newParam,
@@ -77,10 +66,10 @@ export default () => {
   const [secondAlgorithmValue, setSecondAlgorithmValue] = useState({
     value: AlgorithmsEnum.ClosestCity,
     parameters: {},
-    handleChange: (event, newValue) => {
+    handleChangeParam: (event, newParam) => {
       setSecondAlgorithmValue((s)=>({
         ...s,
-        value: newValue,
+        parameters: newParam,
       }));
     },
     handleChangeSelected: (event, newValue) =>{
@@ -435,7 +424,7 @@ export default () => {
     setVorData2(vor2);
     setPolData(pol1);
     setPolData2(pol2);
-  }, [countryCityData, countryHotelData, firstAlgorithmValue]);
+  }, [countryCityData, countryHotelData, firstAlgorithmValue, secondAlgorithmValue]);
 
   useEffect(() => {
     try {
@@ -453,7 +442,7 @@ export default () => {
       height: window.innerHeight - 20,
       longitude: -3.2943888952729092,
       latitude: 53.63605986631115,
-      zoom: 6,
+      zoom: 4,
       maxZoom: 16,
       pitch: 0,
       bearing: 0,
@@ -503,8 +492,8 @@ export default () => {
     getLineColor: [255, 0, 0],
     getLineWidth: 1,
     highlightColor: [255,0,0,20],
-    autoHighlight: true
-    //onHover: (info) => handleOnHover(info),
+    autoHighlight: true,
+    onHover: (info) => handleOnHover(info),
   })
   const layer2 = 
   new PolygonLayer({
@@ -522,8 +511,25 @@ export default () => {
     getLineColor: [0, 0, 255],
     getLineWidth: 1,
     highlightColor: [0,0,255,20],
-    autoHighlight: true
-    //onHover: (info) => handleOnHover(info),
+    autoHighlight: true,
+    onHover: (info) => handleOnHover(info),
+  })
+  function handleOnHover(info) {
+    const {x, y, object} = info
+    let polygonStats = document.getElementById("polygonStats");
+    
+    if (object) {
+      polygonStats.innerHTML = `
+        <div><b>City: </b>${object.city}</div>
+      `;
+    }
+  }
+  const heatMapLayer = new HeatmapLayer({
+    id: 'heatmapLayer',
+    data: processedData,
+    getPosition: d => (d.position),
+    getWeight: 1,
+    aggregation: 'SUM'
   })
   /*<svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
             <Voronoi5
@@ -563,8 +569,8 @@ export default () => {
         opacity: 0.2,
       }))
     }
-  } else {
-    layers.push(layer1)
+  } else { 
+      layers.push(heatMapLayer)
   }
 
   
@@ -578,6 +584,7 @@ export default () => {
         mapboxApiAccessToken={MAPBOX_TOKEN}
         preventStyleDiffing={false}
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
+        text-allow-overlap = {false}
       >
         
         <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
@@ -622,13 +629,19 @@ export default () => {
             marginRight: 10,
             marginBottom: 20,  
           }}
-        >
+        ><div class="column">
+          <div class="row">
           <Settings 
             citySetting={sideParameterCitySetting.value} 
             hotelSetting={sideParameterHotelSetting.value} 
             changeCityValue={sideParameterCitySetting.handleChange} 
             changeHotelValue={sideParameterHotelSetting.handleChange} 
           />
+          </div>
+          <div class="row">
+          <div id ="polygonStats"></div>
+          </div>
+          </div>
         </div>
         <div
           style={{
@@ -713,6 +726,7 @@ export default () => {
           />
           <Algorithms.parameterStateSwitch
             algorithm={secondAlgorithmValue.value}
+            onClick={secondAlgorithmValue.handleChangeParam}
           />
           
         </div>

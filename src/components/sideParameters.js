@@ -6,6 +6,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import { FormGroup, Checkbox } from "@mui/material";
+import { red, blue } from "@mui/material/colors";
 
 export default (props) => {
   const { citySetting, hotelSetting, changeCityValue, changeHotelValue } = props;
@@ -38,8 +39,14 @@ export default (props) => {
           control={
             <Checkbox
               {...controlCityProps(citySetting)}
+              sx={{
+            color: blue[800],
+            '&.Mui-checked': {
+              color: blue[600],
+            },}}
             />
           }
+          
           
           label="Cities"
         />
@@ -48,6 +55,12 @@ export default (props) => {
           control={
             <Checkbox
               {...controlHotelProps(hotelSetting)}
+              sx={{
+            color: red[800],
+            '&.Mui-checked': {
+              color: red[600],
+            },
+          }}
             />
           }
           
