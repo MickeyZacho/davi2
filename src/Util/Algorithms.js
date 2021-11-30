@@ -22,7 +22,7 @@ export default class Algorithms {
     switch(props.algorithm){
       case AlgorithmsEnum.BiggestInRadius:
         console.log("Case: " + AlgorithmsEnum.BiggestInRadius)
-        return BiggestInRadius.getParameters()
+        return BiggestInRadius.getParameters(props.onClick)
       case AlgorithmsEnum.ClosestCity:
         console.log("Case: " + AlgorithmsEnum.ClosestCity)
         return ClosestCity.getParameters()

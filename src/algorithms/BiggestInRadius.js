@@ -15,7 +15,8 @@ export class BiggestInRadius{
         const c = 2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
         return R*c
     }
-    static Process(cityData, hotelData) {
+    static Process(cityData, hotelData, parameters) {
+        console.log("Processing, parameters are: " + parameters.radius)
         //const kdt = new kdTree([], (a,b)=>Math.sqrt(Math.pow(a.lat-b.lat,2)+Math.pow(a.lng-b.lng,2)), ["lat","lng"])
         const kdt = new kdTree([], BiggestInRadius.dist, ["lat","lng"])
         let outData = []
@@ -31,7 +32,7 @@ export class BiggestInRadius{
         });
         hotelData.forEach(e => {
             
-            let closestCity = kdt.nearest({lng: e.position[0],lat: e.position[1]},100,50)
+            let closestCity = kdt.nearest({lng: e.position[0],lat: e.position[1]},100,parameters.radius)
             let res = Math.max.apply(Math, closestCity.map(function(o){return o[0].pop}))
             let obj = closestCity.find(function(o){return o[0].pop == res})
 
@@ -48,13 +49,38 @@ export class BiggestInRadius{
         console.log(outData[0])
         return outData
     }
-    
-    static getParameters() {
-        return (
-            <div style={{width: 500, }}>
-                <span style={{ fontSize: 'medium',}}>Biggest in Radius Parameters</span>
-                <TextField variant="outlined" label="Radius"/>
 
+    
+    static getParameters(setAlgo1) {
+        const [val, setVal] = React.useState(0);
+
+        function handleChange(e){
+            setVal(e.target.value);
+        }
+
+        function handleClick(e){
+            e.preventDefault();
+            console.log(document.getElementById("algo1input1").value);
+            const tmp = document.getElementById("algo1input1").value;
+            setAlgo1(
+                e,
+                {radius: tmp}
+            )
+        }
+        return (
+            <div class="column" style={{width: 500, }}>
+                <div class="row">
+<span style={{ fontSize: 'medium',}}>Biggest in Radius Parameters</span>
+                </div>
+                <div class="row">
+                <label for="algo1input1" id="inputid">Input weight (0-500)</label>
+                <input type="number" id="algo1input1" name="algo1input1" min="0" max= "500" placeholder="standard: 50 " onChange={handleChange}/>
+                </div>
+                <div class="row">
+                <button onClick={handleClick}>Reload</button>
+                </div>
+
+                
             </div>
         )
     }
