@@ -1,5 +1,6 @@
 import { ClosestCity } from "../algorithms/closestCity.js";
 import { BiggestInRadius } from "../algorithms/BiggestInRadius.js";
+import { PopRadius } from "../algorithms/PopRadius.js"
 
 export const AlgorithmsEnum = {
   BiggestInRadius: "Biggest in Radius", 
@@ -17,6 +18,7 @@ export default class Algorithms {
         ClosestCity.Process(cityData, hotelData)
         break;
       case AlgorithmsEnum.PopRadius:
+        PopRadius.Process(cityData, hotelData)
         break;
     }
   }
@@ -29,7 +31,7 @@ export default class Algorithms {
       case AlgorithmsEnum.ClosestCity:
         return ClosestCity.getParameters()
       case AlgorithmsEnum.PopRadius:
-        return null
+        return PopRadius.getParameters()
     }
   }
 }

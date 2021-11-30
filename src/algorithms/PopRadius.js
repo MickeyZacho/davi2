@@ -1,6 +1,7 @@
-
-
+import { FormControl, FormControlLabel, FormLabel, Checkbox, Slider, FormGroup, TextField } from '@mui/material';
+import * as React from 'react';
 import { kdTree } from "kd-tree-javascript"
+import { AlgorithmsEnum } from '../Util/Algorithms';
 
 export class PopRadius{
     static dist(d,b){
@@ -61,6 +62,18 @@ export class PopRadius{
         console.log(Array.from(outData.values))
         console.log(Array.from(outData.values()))
         return Array.from(outData.values())
+    }
+
+    static getParameters(){
+        return (
+            <div style={{width: 500, justifyContent:"center", alignItems:"center"}}>
+                <span style={{ fontSize: 'medium',}}> {AlgorithmsEnum.PopRadius} Parameters</span>
+                <FormGroup>
+                    <FormControlLabel control={<TextField />} label={<span style={{ fontSize: 'small' }}>{"Radius"}</span>} />
+                    <FormControlLabel control={<TextField />} label={<span style={{ fontSize: 'small' }}>{"Scale-factor"}</span>} />
+                </FormGroup>
+            </div>
+        )
     }
     
 }
