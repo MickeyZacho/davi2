@@ -1,5 +1,5 @@
 
-
+import { Button } from "@mui/material";
 import { kdTree } from "kd-tree-javascript"
 import { FormControl, FormControlLabel, FormLabel, Checkbox, Slider, FormGroup, TextField } from '@mui/material';
 import * as React from 'react';
@@ -77,7 +77,7 @@ export class BiggestInRadius{
                 <input type="number" id="algo1input1" name="algo1input1" min="0" max= "500" placeholder="standard: 50 " onChange={handleChange}/>
                 </div>
                 <div class="row">
-                <button onClick={handleClick}>Reload</button>
+                <Button variant="outlined" onClick={handleClick}>Reload</Button>
                 </div>
 
                 
