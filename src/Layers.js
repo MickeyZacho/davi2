@@ -35,9 +35,9 @@ export default props => {
       let avgHotelDistance = 0;
       if(object.avgHotelDist != null) avgHotelDistance = object.avgHotelDist;
       tooltip.innerHTML = `
-        <div><b>${object.country}</b></div>
-        <div>${object.CityName}</div>
-        ${isCity(object) ? `<div>Average hotel distance: ${avgHotelDistance}</div>` : "<div>Hotel</div>"}
+        <div><b>Country:</b> ${object.country}</div>
+        <div><b>City:</b> ${object.CityName}</div>
+        ${isCity(object) ? `<b><div>Average hotel distance:</b> ${avgHotelDistance}</div>` : ""}
       `;
     } else { 
       tooltip.style.visibility = "hidden"
@@ -45,6 +45,6 @@ export default props => {
     }
   }
   function isCity(object){
-    return true;
+    return object.population !== undefined;
   }
 };
