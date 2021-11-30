@@ -48,7 +48,8 @@ export class ClosestCity{
             let entry = {
                 position: [+e.position[0],+e.position[1]],
                 CityName: currentCity.city,
-                country: e.country
+                country: e.country,
+                cityPos: [currentCity.lng, currentCity.lat]
             }
             outData.push(entry)
         })}

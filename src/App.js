@@ -337,6 +337,7 @@ export default () => {
           lat: nPos[1],
           cityName: e.CityName,
           country: e.country,
+          cityPos: e.cityPos
         };
         kdt.insert(entry);
       });
@@ -363,6 +364,7 @@ export default () => {
             b: posB,
             cityName: near.cityName,
             country: near.country,
+            cityPos: near.cityPos
           };
           //Check for wierd case, where start and end position is the same
           if (posA[0] === posB[0] && posA[1] === posB[1]) continue;
@@ -377,7 +379,7 @@ export default () => {
               cityLines.set(near.cityName, []);
             cityLines
               .get(near.cityName)
-              .push({ a: posA, b: posB, sameCountry: true });
+              .push({ a: posA, b: posB, sameCountry: true , cityPos: near.cityPos});
             continue;
           }
           //Identify a path by the sum of the lat and long values, hopefully being unique, for faster search, and to equal a path from a to b and from b to a
@@ -404,6 +406,7 @@ export default () => {
               a: posA,
               b: posB,
               sameCountry: near.country === nPath.country,
+              cityPos: near.cityPos 
             });
           cityLines
             .get(nPath.cityName)
@@ -411,6 +414,7 @@ export default () => {
               a: nPath.a,
               b: nPath.b,
               sameCountry: near.country == nPath.country,
+              cityPos: nPath.cityPos
             });
         }
         res = it.next();
@@ -418,8 +422,8 @@ export default () => {
       return cityLines;
     }
     function calculatePolygons(data) {
-      let polygonMap = new Map();
-
+      //let polygonMap = new Map();
+      let polys = []
       data.forEach((value, key) => {
         //console.log(key);
         //if(key === "No City") return []
@@ -439,6 +443,8 @@ export default () => {
             path[polyCount].push(next.b);
             currentPos = next.b;
           } else {
+            polys.push({CityName: key, polygon: path[polyCount], cityPos: entry.cityPos})
+            
             //console.log(value);
             //path[polyCount].push(entry.a)
             entry = value[0];
@@ -447,14 +453,16 @@ export default () => {
             path.push([entry.a, entry.b]);
             polyCount += 1;
           }
+          polys.push({CityName: key, polygon: path[polyCount], cityPos: entry.cityPos})
         } while (value.length > 0);
 
         //console.log(path);
-        polygonMap.set(key, path);
+       // polygonMap.set(key, path);
+        //polygonMap.set(key, path);
       });
       //testing code
-      let polys = []
-      polygonMap.forEach(value => value.forEach(v => polys.push(v)))
+      //let polys = []
+      //polygonMap.forEach(value => value.forEach(v => polys.push(v)))
       return polys;
       //return polygonMap;
     }
@@ -467,7 +475,7 @@ export default () => {
     let vor2 = calculateVor(procData2);
     let pol1 = calculatePolygons(vor1);
     let pol2 = calculatePolygons(vor2);
-
+    console.log(pol1)
     setProcData(procData);
     setProcData2(procData2);
     setVorData(vor1);
@@ -526,51 +534,51 @@ export default () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const layer1 =
-    new PolygonLayer({
-      id: "polygon-layer",
-      data: polData,
-      stroked: true,
-      filled: true,
-      wireframe: false,
-      opacity: 1 - sliderProps.value / 100,
-      extruded: false,
-      pickable: true,
-      lineWidthMinPixels: 1,
-      getPolygon: (d) => d,
-      getFillColor: [0, 0, 0, 0],
-      getLineColor: [255, 0, 0],
-      getLineWidth: 1,
-      highlightColor: [255, 0, 0, 20],
-      autoHighlight: true,
-      onHover: (info) => handleOnHover(info),
-    })
-  const layer2 =
-    new PolygonLayer({
-      id: "polygon-layer2",
-      data: polData2,
-      stroked: true,
-      filled: true,
-      wireframe: false,
-      opacity: sliderProps.value / 100,
-      extruded: false,
-      pickable: true,
-      lineWidthMinPixels: 1,
-      getPolygon: (d) => d,
-      getFillColor: [0, 0, 0, 0],
-      getLineColor: [0, 0, 255],
-      getLineWidth: 1,
-      highlightColor: [0, 0, 255, 20],
-      autoHighlight: true,
-      onHover: (info) => handleOnHover(info),
-    })
+  const layer1 = 
+  new PolygonLayer({
+    id: "polygon-layer",
+    data: polData,
+    stroked: true,
+    filled: true,
+    wireframe: false,
+    opacity: 1- sliderProps.value / 100, 
+    extruded: false,
+    pickable: true,
+    lineWidthMinPixels: 1,
+    getPolygon: (d) => d.polygon,
+    getFillColor: [0, 0, 0, 0],
+    getLineColor: [255, 0, 0],
+    getLineWidth: 1,
+    highlightColor: [255,0,0,20],
+    autoHighlight: true,
+    onHover: (info) => handleOnHover(info),
+  })
+  const layer2 = 
+  new PolygonLayer({
+    id: "polygon-layer2",
+    data: polData2,
+    stroked: true,
+    filled: true,
+    wireframe: false,
+    opacity: sliderProps.value / 100,
+    extruded: false,
+    pickable: true,
+    lineWidthMinPixels: 1,
+    getPolygon: (d) => d.polygon,
+    getFillColor: [0, 0, 0, 0],
+    getLineColor: [0, 0, 255],
+    getLineWidth: 1,
+    highlightColor: [0,0,255,20],
+    autoHighlight: true,
+    onHover: (info) => handleOnHover(info),
+  })
   function handleOnHover(info) {
     const { x, y, object } = info
     let polygonStats = document.getElementById("polygonStats");
 
     if (object) {
       polygonStats.innerHTML = `
-        <div><b>City: </b>${object.city}</div>
+        <div><b>City: </b>${object.CityName}</div>
       `;
     }
   }
