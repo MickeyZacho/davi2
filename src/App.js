@@ -26,14 +26,12 @@ import RadioButtons from "./components/algorithmselector.js";
 import { AlgorithmsEnum } from "./Util/Algorithms.js";
 import { red, blue } from "@mui/material/colors";
 import Algorithms from "./Util/Algorithms.js";
-import rgba from "color-rgba";
 
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
 const HOTEL_URL = "./hotelsout/";
 const DATA_PATH = "./CountryPop/";
-const bgtest = rgba(0,0,0,0.5);
 
 export default () => {
   const [data, setData] = useState({ value: [] });
@@ -520,6 +518,8 @@ export default () => {
         </svg>
           <DeckGL
             layers={[
+              layer2,
+              layer1,
               renderLayers({
                 data: countryCityData,
                 color: [0, 0, 255],
@@ -532,12 +532,11 @@ export default () => {
                 size: 2,
                 opacity: 0.5,
               }),
-              layer1,
-              layer2
+              
             ]}
             initialViewState={viewport}
             controller={true}
-          ></DeckGL>
+            />
         </MapGL>
         <div
           style={{

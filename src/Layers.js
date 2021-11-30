@@ -29,14 +29,22 @@ export default props => {
     let tooltip = document.getElementById("tooltip");
     
     if (object) {
-      tooltip.style.top = `${y}px`;
-      tooltip.style.left = `${x}px`;
+      tooltip.style.visibility = "visible"
+      tooltip.style.top = `${y + 5}px`;
+      tooltip.style.left = `${x + 5}px`;
+      let avgHotelDistance = 0;
+      if(object.avgHotelDist != null) avgHotelDistance = object.avgHotelDist;
       tooltip.innerHTML = `
         <div><b>${object.country}</b></div>
         <div>${object.CityName}</div>
+        ${isCity(object) ? `<div>Average hotel distance: ${avgHotelDistance}</div>` : "<div>Hotel</div>"}
       `;
     } else { 
+      tooltip.style.visibility = "hidden"
       tooltip.innerHTML = '';
     }
+  }
+  function isCity(object){
+    return true;
   }
 };

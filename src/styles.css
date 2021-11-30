@@ -14,3 +14,10 @@ path {
 #No\ City{
   fill: rgba(255, 0, 0, 0.096);
 }
+
+#tooltip {
+  background-color: rgba(0, 0, 0, 0.651);
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+}
