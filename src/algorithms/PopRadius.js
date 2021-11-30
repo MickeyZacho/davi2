@@ -69,7 +69,7 @@ export class PopRadius{
             <div style={{width: 500, justifyContent:"center", alignItems:"center"}}>
                 <span style={{ fontSize: 'medium',}}> {AlgorithmsEnum.PopRadius} Parameters</span>
                 <FormGroup>
-                    <FormControlLabel control={<TextField />} label={<span style={{ fontSize: 'small' }}>{"Radius"}</span>} />
+                    <FormControlLabel type="number" control={<TextField />} label={<span style={{ fontSize: 'small' }}>{"Radius"}</span>} />
                     <FormControlLabel control={<TextField />} label={<span style={{ fontSize: 'small' }}>{"Scale-factor"}</span>} />
                 </FormGroup>
             </div>

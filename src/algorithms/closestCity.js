@@ -3,7 +3,7 @@ import { FormControl, FormControlLabel, FormLabel, Checkbox, Slider, FormGroup }
 import * as React from 'react';
 
 export class ClosestCity{
-    static Process(cityData, hotelData) {
+    static Process(cityData, hotelData, parameters) {
         const kdt = new kdTree([], (a,b)=>Math.sqrt(Math.pow(a.lat-b.lat,2)+Math.pow(a.lng-b.lng,2)), ["lat","lng"])
         let outData = []
         try{
