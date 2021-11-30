@@ -1,6 +1,8 @@
 
 
 import { kdTree } from "kd-tree-javascript"
+import { FormControl, FormControlLabel, FormLabel, Checkbox, Slider, FormGroup, TextField } from '@mui/material';
+import * as React from 'react';
 
 export class BiggestInRadius{
     static dist(d,b){
@@ -45,6 +47,16 @@ export class BiggestInRadius{
         }
         console.log(outData[0])
         return outData
+    }
+    
+    static getParameters() {
+        return (
+            <div style={{width: 500, }}>
+                <span style={{ fontSize: 'medium',}}>Biggest in Radius Parameters</span>
+                <TextField variant="outlined" label="Radius"/>
+
+            </div>
+        )
     }
     
 }
