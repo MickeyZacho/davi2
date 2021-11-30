@@ -39,7 +39,8 @@ export class BiggestInRadius{
             let entry = {
                 position: [+e.position[0],+e.position[1]],
                 CityName: (obj!=undefined)?obj[0].city:"No City",
-                country: e.country
+                country: e.country,
+                cityPos: (obj!=undefined)?[obj[0].lng, obj[1].lat]:null
             }
             outData.push(entry)
         })}

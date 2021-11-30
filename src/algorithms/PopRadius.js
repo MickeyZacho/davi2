@@ -41,7 +41,8 @@ export class PopRadius{
                 let entry = {
                     position: [+d.lng,+d.lat],
                     CityName: e.CityName,
-                    country: d.country
+                    country: d.country,
+                    cityPos: e.position
                 }
                 outData.set(d.hotelId, entry)
             })
