@@ -24,7 +24,8 @@ export default class Algorithms {
   static parameterStateSwitch(props){
     switch(props.algorithm){
       case AlgorithmsEnum.BiggestInRadius:
-        return BiggestInRadius.getParameters()
+        console.log("Case: " + AlgorithmsEnum.BiggestInRadius)
+        return BiggestInRadius.getParameters(props.onClick)
       case AlgorithmsEnum.ClosestCity:
         return ClosestCity.getParameters()
       case AlgorithmsEnum.PopRadius:

@@ -60,10 +60,12 @@ export default () => {
   });
   const [firstAlgorithmValue, setFirstAlgorithmValue] = useState({
     value: AlgorithmsEnum.BiggestInRadius,
-    handleChange: (event, newValue) => {
+    parameters: {radius: 50},
+    handleChange: (event, newParam) => {
       setFirstAlgorithmValue({
         handleChange: firstAlgorithmValue.handleChange,
-        value: newValue,
+        value: firstAlgorithmValue.value,
+        parameters: newParam,
       });
     },
   });
@@ -254,6 +256,7 @@ export default () => {
   }, []);
 
   useEffect(() => {
+    console.log("Calculating")
     function calculateVor(data) {
       //const point = data.map(d => d.position);
       const delau = Delaunay.from(
@@ -403,9 +406,8 @@ export default () => {
       //return polygonMap;
     }
 
-    let procData2 = BiggestInRadius.Process(countryCityData, countryHotelData);
-    let procData = PopRadius.Process(countryCityData, countryHotelData);
-    
+    let procData = BiggestInRadius.Process(countryCityData, countryHotelData, firstAlgorithmValue.parameters);
+    let procData2 = ClosestCity.Process(countryCityData, countryHotelData);
     let vor1 = calculateVor(procData);
     let vor2 = calculateVor(procData2);
     let pol1 = calculatePolygons(vor1);
@@ -417,7 +419,7 @@ export default () => {
     setVorData2(vor2);
     setPolData(pol1);
     setPolData2(pol2);
-  }, [countryCityData, countryHotelData]);
+  }, [countryCityData, countryHotelData, firstAlgorithmValue]);
 
   useEffect(() => {
     try {
@@ -649,6 +651,7 @@ export default () => {
         >
           <Algorithms.parameterStateSwitch
             algorithm={firstAlgorithmValue.value}
+            onClick={firstAlgorithmValue.handleChange}
           />
           <RadioButtons
             buttonColor={red[800]}
