@@ -28,7 +28,7 @@ export default class Algorithms {
       case AlgorithmsEnum.ClosestCity:
         return ClosestCity.getParameters()
       case AlgorithmsEnum.PopRadius:
-        return null
+        return 
     }
   }
 }
