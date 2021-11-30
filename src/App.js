@@ -406,8 +406,8 @@ export default () => {
       //return polygonMap;
     }
 
-    let procData = BiggestInRadius.Process(countryCityData, countryHotelData, firstAlgorithmValue.parameters);
-    let procData2 = ClosestCity.Process(countryCityData, countryHotelData);
+    let procData2 = BiggestInRadius.Process(countryCityData, countryHotelData, firstAlgorithmValue.parameters);
+    let procData = ClosestCity.Process(countryCityData, countryHotelData);
     let vor1 = calculateVor(procData);
     let vor2 = calculateVor(procData2);
     let pol1 = calculatePolygons(vor1);

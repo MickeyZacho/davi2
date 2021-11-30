@@ -3,24 +3,50 @@ import { FormControl, FormControlLabel, FormLabel, Checkbox, Slider, FormGroup }
 import * as React from 'react';
 
 export class ClosestCity{
+    static dist(d,b){
+        const R = 6371
+        let lat1 = d.lat * Math.PI/180
+        let lat2 = b.lat * Math.PI/180
+        let deltalat = (b.lat-d.lat)*Math.PI/180
+        let deltalng = (b.lng-d.lng)*Math.PI/180
+        const a = Math.pow(Math.sin(deltalat/2),2)+Math.cos(lat1)*Math.cos(lat2)*Math.pow(Math.sin(deltalng/2),2)
+        const c = 2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
+        return R*c
+    }
     static Process(cityData, hotelData) {
-        const kdt = new kdTree([], (a,b)=>Math.sqrt(Math.pow(a.lat-b.lat,2)+Math.pow(a.lng-b.lng,2)), ["lat","lng"])
+        const kdt = new kdTree([], ClosestCity.dist, ["lat","lng"])
         let outData = []
         try{
         cityData.forEach(e => {
             let entry = {
                 lng: e.position[0],
                 lat: e.position[1],
-                city: e.CityName
+                city: e.CityName,
+                population: e.population
             }
             kdt.insert(entry)
         });
         hotelData.forEach(e => {
             
-            let closestCity = kdt.nearest({lng: e.position[0],lat: e.position[1]},1)[0][0].city
+            let closestCities = kdt.nearest({lng: e.position[0],lat: e.position[1]},100)
+            let currentCity = closestCities[0][0]
+            let scale = 1
+            //let curDistance = closestCities[0][1]*1/Math.pow(currentCity.population,scale)
+            let curDistance = closestCities[0][1]/Math.pow(Math.log(currentCity.population),scale)
+            
+            for(let i = 1; i<closestCities.length; i++){
+                let city = closestCities[i][0]
+                //let dist = d[1]*1/Math.pow(city.population, scale)
+                let dist = closestCities[i][1]/Math.pow(Math.log(city.population), scale)
+                if(curDistance > dist){
+                    currentCity = city
+                    curDistance = dist
+                }
+            }
+
             let entry = {
                 position: [+e.position[0],+e.position[1]],
-                CityName: closestCity,
+                CityName: currentCity.city,
                 country: e.country
             }
             outData.push(entry)
