@@ -284,6 +284,7 @@ export default () => {
           lat: nPos[1],
           cityName: e.CityName,
           country: e.country,
+          cityPos: e.cityPos
         };
         kdt.insert(entry);
       });
@@ -325,7 +326,7 @@ export default () => {
               cityLines.set(near.cityName, []);
             cityLines
               .get(near.cityName)
-              .push({ a: posA, b: posB, sameCountry: true });
+              .push({ a: posA, b: posB, sameCountry: true , cityPos: near.cityPos});
             continue;
           }
           //Identify a path by the sum of the lat and long values, hopefully being unique, for faster search, and to equal a path from a to b and from b to a
@@ -389,8 +390,9 @@ export default () => {
             path[polyCount].push(next.b);
             currentPos = next.b;
           } else {
-            polys.push({city: key, polygon: path[polyCount], cityPos: entry.cityPos})
-            console.log(value);
+            polys.push({CityName: key, polygon: path[polyCount], cityPos: entry.cityPos})
+            
+            //console.log(value);
             //path[polyCount].push(entry.a)
             entry = value[0];
             value.splice(value.indexOf(entry), 1);
@@ -400,8 +402,6 @@ export default () => {
           }
           polys.push({CityName: key, polygon: path[polyCount], cityPos: entry.cityPos})
         } while (value.length > 0);
-
-        console.log(path);
         //polygonMap.set(key, path);
       });
       //testing code
@@ -520,7 +520,7 @@ export default () => {
     
     if (object) {
       polygonStats.innerHTML = `
-        <div><b>City: </b>${object.city}</div>
+        <div><b>City: </b>${object.CityName}</div>
       `;
     }
   }
