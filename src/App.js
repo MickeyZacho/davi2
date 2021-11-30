@@ -20,9 +20,10 @@ import { apiBase } from "./api.js";
 import { ClosestCity } from "./algorithms/closestCity.js";
 import * as d3 from "d3";
 import Box from "@mui/material/Box";
-import { Slider } from "@mui/material";
+import { Button, Slider } from "@mui/material";
 import { BiggestInRadius } from "./algorithms/BiggestInRadius.js";
 import RadioButtons from "./components/algorithmselector.js";
+import Settings from "./components/sideParameters";
 import { AlgorithmsEnum } from "./Util/Algorithms.js";
 import { red, blue } from "@mui/material/colors";
 import Algorithms from "./Util/Algorithms.js";
@@ -66,12 +67,32 @@ export default () => {
       });
     },
   });
+  
   const [secondAlgorithmValue, setSecondAlgorithmValue] = useState({
     value: AlgorithmsEnum.ClosestCity,
     handleChange: (event, newValue) => {
       setSecondAlgorithmValue({
         handleChange: secondAlgorithmValue.handleChange,
         value: newValue,
+      });
+    },
+  });
+
+  const [sideParameterCitySetting, setSideParameterCitySetting] = useState({
+    value: true,
+    handleChange: (event, newValue) => {
+      setSideParameterCitySetting({
+        handleChange: sideParameterCitySetting.handleChange,
+        value: newValue
+      });
+    },
+  });
+  const [sideParameterHotelSetting, setsideParameterSettings] = useState({
+    value: true,
+    handleChange: (event, newValue) => {
+      setsideParameterSettings({
+        handleChange: sideParameterHotelSetting.handleChange,
+        value: newValue
       });
     },
   });
@@ -455,6 +476,7 @@ export default () => {
     stroked: true,
     filled: true,
     wireframe: false,
+    opacity: sliderProps.value / 100, 
     extruded: false,
     pickable: true,
     lineWidthMinPixels: 1,
@@ -473,6 +495,7 @@ export default () => {
     stroked: true,
     filled: true,
     wireframe: false,
+    opacity: 1- sliderProps.value / 100,
     extruded: false,
     pickable: true,
     lineWidthMinPixels: 1,
@@ -484,15 +507,6 @@ export default () => {
     autoHighlight: true
     //onHover: (info) => handleOnHover(info),
   })
-;
-
-  function handleOnHover(info) {
-    const { x, y, object } = info;
-    if (object) {
-      let Denmark = document.getElementById(object.CityName);
-      if (Denmark != null) Denmark.style.fill = "green";
-    }
-  }
   /*<svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
             <Voronoi5
               viewport={viewport}
@@ -509,13 +523,40 @@ export default () => {
         <Voronoi5 viewport={viewport} data={polData} opacity={sliderProps.value / 100} colorString={"blue"}/>
         <Voronoi5 viewport={viewport} data={polData2} opacity={1-sliderProps.value / 100} colorString={"red"}/>
           </svg>*/
+  let layers = [];
+  if(viewport.zoom >= 6){
+   layers.push(
+    layer2,
+    layer1
+    )
+    if(sideParameterCitySetting.value) { 
+      layers.push(renderLayers({
+        data: countryCityData,
+        color: [0, 0, 255],
+        size: 5,
+        opacity: 0.5
+      }))
+    }
+    if(sideParameterHotelSetting.value){
+      layers.push(renderLayers({
+        data: processedData,
+        color: [255, 0, 0],
+        size: 2,
+        opacity: 0.2,
+      }))
+    }
+  } else {
+    layers.push(layer1)
+  }
+
+  
   return (
     
     <div style={{height: "100vh"}}>
       <div>
       <MapGL
         {...viewport}
-        mapStyle={"mapbox://styles/mapbox/light-v9"}
+        mapStyle={"mapbox://styles/mapbox/light-v10"}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         preventStyleDiffing={false}
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
@@ -524,27 +565,53 @@ export default () => {
         <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
         </svg>
           <DeckGL
-            layers={[
-              layer2,
-              layer1,
-              renderLayers({
-                data: countryCityData,
-                color: [0, 0, 255],
-                size: 5,
-                opacity: 0.5,
-              }),
-              renderLayers({
-                data: processedData,
-                color: [255, 0, 0],
-                size: 2,
-                opacity: 0.5,
-              }),
-              
-            ]}
+            layers={layers}
             initialViewState={viewport}
             controller={true}
             />
         </MapGL>
+        <div
+          style={{
+            position: "absolute",
+            width: nonMapHeight,
+            height: viewport.height - nonMapHeight - 100,
+            right: 10,
+            top: 10,
+            display: "flex",
+            justifyContent: "space-between",
+            marginLeft: 25,
+            marginRight: 25,
+            marginTop: 10,
+            marginBottom: 10,          
+            opacity: 1, 
+            backgroundColor: "white",
+            
+            borderRadius: "25px",
+            border: "2px solid #4c768d"
+          }}
+        ></div>
+        <div
+          style={{
+            position: "absolute",
+            width: nonMapHeight,
+            height: viewport.height - nonMapHeight - 100,
+            top: 10,
+            right: 10,
+            display: "flex",
+            justifyContent: "left",
+            alignItems: "top",
+            marginLeft: 50,
+            marginRight: 10,
+            marginBottom: 20,  
+          }}
+        >
+          <Settings 
+            citySetting={sideParameterCitySetting.value} 
+            hotelSetting={sideParameterHotelSetting.value} 
+            changeCityValue={sideParameterCitySetting.handleChange} 
+            changeHotelValue={sideParameterHotelSetting.handleChange} 
+          />
+        </div>
         <div
           style={{
             position: "absolute",

@@ -4,6 +4,7 @@ import { BiggestInRadius } from "../algorithms/BiggestInRadius.js";
 export const AlgorithmsEnum = {
   BiggestInRadius: "Biggest in Radius", 
   ClosestCity: "Closest City",
+  PopRadius: "Biggest in Radius scaled by Population"
 }
 
 export default class Algorithms {
@@ -15,17 +16,19 @@ export default class Algorithms {
       case AlgorithmsEnum.ClosestCity:
         ClosestCity.Process(cityData, hotelData)
         break;
+      case AlgorithmsEnum.PopRadius:
+        break;
     }
   }
 
   static parameterStateSwitch(props){
     switch(props.algorithm){
       case AlgorithmsEnum.BiggestInRadius:
-        console.log("Case: " + AlgorithmsEnum.BiggestInRadius)
         return BiggestInRadius.getParameters()
       case AlgorithmsEnum.ClosestCity:
-        console.log("Case: " + AlgorithmsEnum.ClosestCity)
         return ClosestCity.getParameters()
+      case AlgorithmsEnum.PopRadius:
+        return null
     }
   }
 }
