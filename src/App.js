@@ -68,16 +68,15 @@ export default () => {
       }));
     },
     handleChangeSelected: (event, newValue) =>{
-      setFirstAlgorithmValue({
-        handleChangeSelected: firstAlgorithmValue.handleChangeSelected,
-        handleChangeParam: firstAlgorithmValue.handleChangeParam,
+      setFirstAlgorithmValue((s) =>({
+        ...s,
         value: newValue,
-        parameters: firstAlgorithmValue.parameters
-    })
+      }))
     }
   });
   const [secondAlgorithmValue, setSecondAlgorithmValue] = useState({
     value: AlgorithmsEnum.ClosestCity,
+    parameters: {},
     handleChange: (event, newValue) => {
       setSecondAlgorithmValue((s)=>({
         ...s,
@@ -85,12 +84,10 @@ export default () => {
       }));
     },
     handleChangeSelected: (event, newValue) =>{
-      setFirstAlgorithmValue({
-        handleChangeSelected: secondAlgorithmValue.handleChangeSelected,
-        handleChangeParam: secondAlgorithmValue.handleChangeParam,
+      setSecondAlgorithmValue((s) =>({
+        ...s,
         value: newValue,
-        parameters: secondAlgorithmValue.parameters
-    })
+      }))
     }
   });
 
