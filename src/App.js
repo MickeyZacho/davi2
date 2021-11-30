@@ -406,7 +406,7 @@ export default () => {
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
       width: window.innerWidth,
-      height: window.innerHeight -20,
+      height: window.innerHeight - 20,
       longitude: -3.2943888952729092,
       latitude: 53.63605986631115,
       zoom: 6,
@@ -443,37 +443,8 @@ export default () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const sampleData = [
-    {
-      polygon: [
-        [0, 0],
-        [0, 1],
-        [1, 1],
-        [1, 0],
-        [0, 0],
-      ],
-    }, // Simple polygon (array of coords)
-    {
-      polygon: [
-        // Complex polygon with one hole
-        [
-          [0, 0],
-          [0, 2],
-          [2, 2],
-          [2, 0],
-          [0, 0],
-        ], // (array of array of coords)
-        [
-          [0, 0],
-          [0, 1],
-          [1, 1],
-          [1, 0],
-          [0, 0],
-        ],
-      ],
-    },
-  ];
-  const layer =[ new PolygonLayer({
+  const layer1 = 
+  new PolygonLayer({
     id: "polygon-layer",
     data: polData,
     stroked: true,
@@ -489,7 +460,8 @@ export default () => {
     highlightColor: [255,0,0,20],
     autoHighlight: true
     //onHover: (info) => handleOnHover(info),
-  }),
+  })
+  const layer2 = 
   new PolygonLayer({
     id: "polygon-layer2",
     data: polData2,
@@ -507,7 +479,7 @@ export default () => {
     autoHighlight: true
     //onHover: (info) => handleOnHover(info),
   })
-];
+;
 
   function handleOnHover(info) {
     const { x, y, object } = info;
@@ -529,23 +501,23 @@ export default () => {
               opacity={1 - sliderProps.value / 100}
               colorString={"red"}
             />
+        <Voronoi5 viewport={viewport} data={polData} opacity={sliderProps.value / 100} colorString={"blue"}/>
+        <Voronoi5 viewport={viewport} data={polData2} opacity={1-sliderProps.value / 100} colorString={"red"}/>
           </svg>*/
   return (
-    <div width={viewport.width}>
-      <div
-        id="tooltip"
-        style={{ position: "absolute", zIndex: 1, pointerEvents: "none" }}
-      />
+    
+    <div style={{height: "100vh"}}>
       <div>
-        <MapGL
-          {...viewport}
-          mapStyle={"mapbox://styles/mapbox/light-v9"}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
-          preventStyleDiffing={false}
-          onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
-        >
-          
-
+      <MapGL
+        {...viewport}
+        mapStyle={"mapbox://styles/mapbox/light-v9"}
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+        preventStyleDiffing={false}
+        onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
+      >
+        
+        <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
+        </svg>
           <DeckGL
             layers={[
               renderLayers({
@@ -560,7 +532,8 @@ export default () => {
                 size: 2,
                 opacity: 0.5,
               }),
-              layer,
+              layer1,
+              layer2
             ]}
             initialViewState={viewport}
             controller={true}
@@ -601,7 +574,6 @@ export default () => {
             marginBottom: 20,  
           }}
         >
-        
           <Algorithms.parameterStateSwitch
             algorithm={firstAlgorithmValue.value}
           />
@@ -650,8 +622,11 @@ export default () => {
           <Algorithms.parameterStateSwitch
             algorithm={secondAlgorithmValue.value}
           />
+          
         </div>
+        </div>
+        <div id="tooltip" style={{position: 'absolute', zIndex: 1, pointerEvents: 'none'}}/>
       </div>
-    </div>
+      
   );
 };
