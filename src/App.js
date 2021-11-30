@@ -25,7 +25,7 @@ const HOTEL_URL = "./hotelsout/";
 const DATA_PATH = "./CountryPop/";
 
 export default () => {
-  const [data, setData] = useState( [] );
+  const [data, setData] = useState([]);
   const [hotelData, setHotelData] = useState([]);
   const [countryHotelData, setCountryHotelData] = useState([]);
   const [countryCityData, setCountryCityData] = useState([]);
@@ -41,42 +41,95 @@ export default () => {
   const [sliderProps, setSliderProps] = useState({
     value: 20,
     handleChange: (event, newValue) => {
-      setSliderProps((s)=>({
+      setSliderProps((s) => ({
         ...s,
         value: newValue,
       }));
     },
   });
+  const defaultParams = {
+    biggestInRadius: { radius: 50 },
+    closestCity: {
+      check1: true,
+      check2: false,
+    },
+    biggestPopScale: {
+      radius: 50,
+      scaleFactor: 1,
+    }
+  }
   const [firstAlgorithmValue, setFirstAlgorithmValue] = useState({
     value: AlgorithmsEnum.BiggestInRadius,
-    parameters: {radius: 50},
+    parameters: { radius: 50 },
     handleChangeParam: (event, newParam) => {
       setFirstAlgorithmValue((s) => ({
         ...s,
         parameters: newParam,
       }));
     },
-    handleChangeSelected: (event, newValue) =>{
-      setFirstAlgorithmValue((s) =>({
-        ...s,
-        value: newValue,
-      }))
+
+    handleChangeSelected: (event, newValue) => {
+      switch (newValue) {
+        case AlgorithmsEnum.BiggestInRadius:
+
+          setFirstAlgorithmValue((s) => ({
+            ...s,
+            parameters: defaultParams.biggestInRadius,
+            value: newValue,
+          }))
+          break;
+        case AlgorithmsEnum.ClosestCity:
+          setFirstAlgorithmValue((s) => ({
+            ...s,
+            parameters: defaultParams.closestCity,
+            value: newValue,
+          }))
+          break;
+        case AlgorithmsEnum.PopRadius:
+          setFirstAlgorithmValue((s) => ({
+            ...s,
+            parameters: defaultParams.biggestPopScale,
+            value: newValue,
+          }))
+          break;  
+      }
     }
   });
   const [secondAlgorithmValue, setSecondAlgorithmValue] = useState({
     value: AlgorithmsEnum.ClosestCity,
     parameters: {},
     handleChangeParam: (event, newParam) => {
-      setSecondAlgorithmValue((s)=>({
+      setSecondAlgorithmValue((s) => ({
         ...s,
         parameters: newParam,
       }));
     },
-    handleChangeSelected: (event, newValue) =>{
-      setSecondAlgorithmValue((s) =>({
-        ...s,
-        value: newValue,
-      }))
+    handleChangeSelected: (event, newValue) => {
+      //console.log("Got here")
+      
+      switch (newValue) {
+        case AlgorithmsEnum.BiggestInRadius:
+          setSecondAlgorithmValue((s) => ({
+            ...s,
+            parameters: defaultParams.biggestInRadius,
+            value: newValue,
+          }))
+          break;
+        case AlgorithmsEnum.ClosestCity:
+          setSecondAlgorithmValue((s) => ({
+            ...s,
+            parameters: defaultParams.closestCity,
+            value: newValue,
+          }))
+          break;
+        case AlgorithmsEnum.PopRadius:
+          setSecondAlgorithmValue((s) => ({
+            ...s,
+            parameters: defaultParams.biggestPopScale,
+            value: newValue,
+          }))
+          break;  
+      }
     }
   });
 
@@ -171,7 +224,7 @@ export default () => {
           }
         });
       }
-      console.log("counter: " + counter);
+      //console.log("counter: " + counter);
       /*var citybox = {
         Topleftlat: 59.6260769571419,
         Topleftlong: -13.21956641460763,
@@ -192,7 +245,7 @@ export default () => {
         };
       });
       const finalpoints = points.filter((point) => point.population !== "");
-      console.log("GOT HERE");
+      //console.log("GOT HERE");
       setData(finalpoints);
     };
 
@@ -208,8 +261,8 @@ export default () => {
           }
         });
       }
-      console.log("This was also reached");
-      console.log("counter: " + counter);
+      //console.log("This was also reached");
+      //console.log("counter: " + counter);
       const points = result.map(function (d) {
         //console.log(d);
         //console.log(d.city)
@@ -220,7 +273,7 @@ export default () => {
           country: d.Country,
         };
       });
-      console.log("GOT HERE");
+      //console.log("GOT HERE");
       setHotelData(points);
       setPosToCountry(new CountryFinder(points));
     };
@@ -287,7 +340,7 @@ export default () => {
         };
         kdt.insert(entry);
       });
-      
+
       const lineMap = new Map();
       let cityLines = new Map();
 
@@ -330,11 +383,11 @@ export default () => {
           //Identify a path by the sum of the lat and long values, hopefully being unique, for faster search, and to equal a path from a to b and from b to a
           let a = posA[0] + posA[1];
           let b = posB[0] + posB[1];
-          let id = ""+posA[0]+posA[1]+posB[0]+posB[1]
-          if(a<b) id = ""+posB[0]+posB[1]+posA[0]+posA[1]
+          let id = "" + posA[0] + posA[1] + posB[0] + posB[1]
+          if (a < b) id = "" + posB[0] + posB[1] + posA[0] + posA[1]
           let nPath = lineMap.get(id)
-          if(nPath === undefined)
-            lineMap.set(id,path);
+          if (nPath === undefined)
+            lineMap.set(id, path);
           //When inserting, we return null if there wasn't an already existing element, otherwise we return the already existing, meaning we found a match
           //Check if the city of the found path is different from the current cell, otherwise we don't want to draw the path
 
@@ -368,7 +421,7 @@ export default () => {
       let polygonMap = new Map();
 
       data.forEach((value, key) => {
-        console.log(key);
+        //console.log(key);
         //if(key === "No City") return []
         let entry = value[0];
         value.splice(value.indexOf(entry), 1);
@@ -386,7 +439,7 @@ export default () => {
             path[polyCount].push(next.b);
             currentPos = next.b;
           } else {
-            console.log(value);
+            //console.log(value);
             //path[polyCount].push(entry.a)
             entry = value[0];
             value.splice(value.indexOf(entry), 1);
@@ -396,7 +449,7 @@ export default () => {
           }
         } while (value.length > 0);
 
-        console.log(path);
+        //console.log(path);
         polygonMap.set(key, path);
       });
       //testing code
@@ -405,9 +458,11 @@ export default () => {
       return polys;
       //return polygonMap;
     }
-    
+
     let procData = Algorithms.algorithmStateSwitch(firstAlgorithmValue.value, countryCityData, countryHotelData, firstAlgorithmValue.parameters)
     let procData2 = Algorithms.algorithmStateSwitch(secondAlgorithmValue.value, countryCityData, countryHotelData, secondAlgorithmValue.parameters)
+    console.log(1,procData)
+    console.log(2,procData2);
     let vor1 = calculateVor(procData);
     let vor2 = calculateVor(procData2);
     let pol1 = calculatePolygons(vor1);
@@ -427,7 +482,7 @@ export default () => {
       let filteredCities = data.filter((e) => e.country === curCountry);
       setCountryCityData(filteredCities);
       setCountryHotelData(filteredHotels);
-    } catch {}
+    } catch { }
   }, [curCountry]);
   // The height of the bottom part of the visualization scales lineary with how many algorithms exists in the enum + 50 because of the title
   const nonMapHeight = Object.keys(AlgorithmsEnum).length * 50 + 50;
@@ -451,9 +506,9 @@ export default () => {
       if (country !== curCountry) {
         setCurCountry(country);
       }
-    } catch {}
+    } catch { }
 
-    console.log("Check country This is run");
+    //console.log("Check country This is run");
   }, [viewport]);
 
   //resize
@@ -471,48 +526,48 @@ export default () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const layer1 = 
-  new PolygonLayer({
-    id: "polygon-layer",
-    data: polData,
-    stroked: true,
-    filled: true,
-    wireframe: false,
-    opacity: 1- sliderProps.value / 100, 
-    extruded: false,
-    pickable: true,
-    lineWidthMinPixels: 1,
-    getPolygon: (d) => d,
-    getFillColor: [0, 0, 0, 0],
-    getLineColor: [255, 0, 0],
-    getLineWidth: 1,
-    highlightColor: [255,0,0,20],
-    autoHighlight: true,
-    onHover: (info) => handleOnHover(info),
-  })
-  const layer2 = 
-  new PolygonLayer({
-    id: "polygon-layer2",
-    data: polData2,
-    stroked: true,
-    filled: true,
-    wireframe: false,
-    opacity: sliderProps.value / 100,
-    extruded: false,
-    pickable: true,
-    lineWidthMinPixels: 1,
-    getPolygon: (d) => d,
-    getFillColor: [0, 0, 0, 0],
-    getLineColor: [0, 0, 255],
-    getLineWidth: 1,
-    highlightColor: [0,0,255,20],
-    autoHighlight: true,
-    onHover: (info) => handleOnHover(info),
-  })
+  const layer1 =
+    new PolygonLayer({
+      id: "polygon-layer",
+      data: polData,
+      stroked: true,
+      filled: true,
+      wireframe: false,
+      opacity: 1 - sliderProps.value / 100,
+      extruded: false,
+      pickable: true,
+      lineWidthMinPixels: 1,
+      getPolygon: (d) => d,
+      getFillColor: [0, 0, 0, 0],
+      getLineColor: [255, 0, 0],
+      getLineWidth: 1,
+      highlightColor: [255, 0, 0, 20],
+      autoHighlight: true,
+      onHover: (info) => handleOnHover(info),
+    })
+  const layer2 =
+    new PolygonLayer({
+      id: "polygon-layer2",
+      data: polData2,
+      stroked: true,
+      filled: true,
+      wireframe: false,
+      opacity: sliderProps.value / 100,
+      extruded: false,
+      pickable: true,
+      lineWidthMinPixels: 1,
+      getPolygon: (d) => d,
+      getFillColor: [0, 0, 0, 0],
+      getLineColor: [0, 0, 255],
+      getLineWidth: 1,
+      highlightColor: [0, 0, 255, 20],
+      autoHighlight: true,
+      onHover: (info) => handleOnHover(info),
+    })
   function handleOnHover(info) {
-    const {x, y, object} = info
+    const { x, y, object } = info
     let polygonStats = document.getElementById("polygonStats");
-    
+
     if (object) {
       polygonStats.innerHTML = `
         <div><b>City: </b>${object.city}</div>
@@ -543,12 +598,12 @@ export default () => {
         <Voronoi5 viewport={viewport} data={polData2} opacity={1-sliderProps.value / 100} colorString={"red"}/>
           </svg>*/
   let layers = [];
-  if(viewport.zoom >= 6){
-   layers.push(
-    layer2,
-    layer1
+  if (viewport.zoom >= 6) {
+    layers.push(
+      layer2,
+      layer1
     )
-    if(sideParameterCitySetting.value) { 
+    if (sideParameterCitySetting.value) {
       layers.push(renderLayers({
         data: countryCityData,
         color: [0, 0, 255],
@@ -556,7 +611,7 @@ export default () => {
         opacity: 0.5
       }))
     }
-    if(sideParameterHotelSetting.value){
+    if (sideParameterHotelSetting.value) {
       layers.push(renderLayers({
         data: processedData,
         color: [255, 0, 0],
@@ -564,31 +619,31 @@ export default () => {
         opacity: 0.2,
       }))
     }
-  } else { 
-      layers.push(heatMapLayer)
+  } else {
+    layers.push(heatMapLayer)
   }
 
-  
+
   return (
-    
-    <div style={{height: "100vh"}}>
+
+    <div style={{ height: "100vh" }}>
       <div>
-      <MapGL
-        {...viewport}
-        mapStyle={"mapbox://styles/mapbox/light-v10"}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
-        preventStyleDiffing={false}
-        onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
-        text-allow-overlap = {false}
-      >
-        
-        <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
-        </svg>
+        <MapGL
+          {...viewport}
+          mapStyle={"mapbox://styles/mapbox/light-v10"}
+          mapboxApiAccessToken={MAPBOX_TOKEN}
+          preventStyleDiffing={false}
+          onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
+          text-allow-overlap={false}
+        >
+
+          <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
+          </svg>
           <DeckGL
             layers={layers}
             initialViewState={viewport}
             controller={true}
-            />
+          />
         </MapGL>
         <div
           style={{
@@ -602,10 +657,10 @@ export default () => {
             marginLeft: 25,
             marginRight: 25,
             marginTop: 10,
-            marginBottom: 10,          
-            opacity: 1, 
+            marginBottom: 10,
+            opacity: 1,
             backgroundColor: "white",
-            
+
             borderRadius: "25px",
             border: "2px solid #4c768d"
           }}
@@ -622,20 +677,20 @@ export default () => {
             alignItems: "top",
             marginLeft: 50,
             marginRight: 10,
-            marginBottom: 20,  
+            marginBottom: 20,
           }}
         ><div class="column">
-          <div class="row">
-          <Settings 
-            citySetting={sideParameterCitySetting.value} 
-            hotelSetting={sideParameterHotelSetting.value} 
-            changeCityValue={sideParameterCitySetting.handleChange} 
-            changeHotelValue={sideParameterHotelSetting.handleChange} 
-          />
-          </div>
-          <div class="row">
-          <div id ="polygonStats"></div>
-          </div>
+            <div class="row">
+              <Settings
+                citySetting={sideParameterCitySetting.value}
+                hotelSetting={sideParameterHotelSetting.value}
+                changeCityValue={sideParameterCitySetting.handleChange}
+                changeHotelValue={sideParameterHotelSetting.handleChange}
+              />
+            </div>
+            <div class="row">
+              <div id="polygonStats"></div>
+            </div>
           </div>
         </div>
         <div
@@ -650,10 +705,10 @@ export default () => {
             marginLeft: 25,
             marginRight: 25,
             marginTop: 10,
-            marginBottom: 10,          
-            opacity: 1, 
+            marginBottom: 10,
+            opacity: 1,
             backgroundColor: "white",
-            
+
             borderRadius: "25px",
             border: "2px solid #4c768d"
           }}
@@ -670,7 +725,7 @@ export default () => {
             height: nonMapHeight,
             marginLeft: 50,
             marginRight: 10,
-            marginBottom: 20,  
+            marginBottom: 20,
           }}
         >
           <Algorithms.parameterStateSwitch
@@ -682,7 +737,7 @@ export default () => {
             title="First Algorithm"
             changeValue={firstAlgorithmValue.handleChangeSelected}
             startValue={firstAlgorithmValue.value}
-            
+
           />
           <Box
             sx={{
@@ -723,11 +778,11 @@ export default () => {
             algorithm={secondAlgorithmValue.value}
             onClick={secondAlgorithmValue.handleChangeParam}
           />
-          
+
         </div>
-        </div>
-        <div id="tooltip" style={{position: 'absolute', zIndex: 1, pointerEvents: 'none'}}/>
       </div>
-      
+      <div id="tooltip" style={{ position: 'absolute', zIndex: 1, pointerEvents: 'none' }} />
+    </div>
+
   );
 };

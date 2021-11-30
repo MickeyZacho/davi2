@@ -60,11 +60,9 @@ export class BiggestInRadius{
 
         function handleClick(e){
             e.preventDefault();
-            console.log(val, document.getElementById("algo1input1").value);
-            const tmp = document.getElementById("algo1input1").value;
             setAlgo(
                 e,
-                {radius: tmp}
+                {radius: val}
             )
         }
         return (
