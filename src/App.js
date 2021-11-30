@@ -9,27 +9,15 @@ import MapGL, { _useMapControl as useMapControl } from "react-map-gl";
 import renderLayers from "./Layers.js";
 import { CountryFinder } from "./algorithms/CountryFinder.js";
 import { Delaunay } from "d3-delaunay";
-import { BinarySearchTree } from "./SearchTree.js";
 import { kdTree } from "kd-tree-javascript";
-import Voronoi from "./voronoi.js";
-import Voronoi2 from "./voronoi2.js";
-import Voronoi3 from "./voronoi3.js";
-import Voronoi4 from "./voronoi4.js";
-import Voronoi5 from "./voronoi5.js";
-import FuncVoronoi from "./FuncVoronoi.js";
-import { apiBase } from "./api.js";
-import { ClosestCity } from "./algorithms/closestCity.js";
 import * as d3 from "d3";
 import Box from "@mui/material/Box";
 import { Button, Slider } from "@mui/material";
-import { BiggestInRadius } from "./algorithms/BiggestInRadius.js";
 import RadioButtons from "./components/algorithmselector.js";
 import Settings from "./components/sideParameters";
 import { AlgorithmsEnum } from "./Util/Algorithms.js";
 import { red, blue } from "@mui/material/colors";
 import Algorithms from "./Util/Algorithms.js";
-import { PopRadius } from "./algorithms/PopRadius.js";
-
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
@@ -62,7 +50,7 @@ export default () => {
   const [firstAlgorithmValue, setFirstAlgorithmValue] = useState({
     value: AlgorithmsEnum.BiggestInRadius,
     parameters: {radius: 50},
-    handleChange: (event, newParam) => {
+    handleChangeParam: (event, newParam) => {
       setFirstAlgorithmValue((s) => ({
         ...s,
         parameters: newParam,
@@ -78,10 +66,10 @@ export default () => {
   const [secondAlgorithmValue, setSecondAlgorithmValue] = useState({
     value: AlgorithmsEnum.ClosestCity,
     parameters: {},
-    handleChange: (event, newValue) => {
+    handleChangeParam: (event, newParam) => {
       setSecondAlgorithmValue((s)=>({
         ...s,
-        value: newValue,
+        parameters: newParam,
       }));
     },
     handleChangeSelected: (event, newValue) =>{
@@ -431,7 +419,7 @@ export default () => {
     setVorData2(vor2);
     setPolData(pol1);
     setPolData2(pol2);
-  }, [countryCityData, countryHotelData, firstAlgorithmValue]);
+  }, [countryCityData, countryHotelData, firstAlgorithmValue, secondAlgorithmValue]);
 
   useEffect(() => {
     try {
@@ -733,6 +721,7 @@ export default () => {
           />
           <Algorithms.parameterStateSwitch
             algorithm={secondAlgorithmValue.value}
+            onClick={secondAlgorithmValue.handleChangeParam}
           />
           
         </div>

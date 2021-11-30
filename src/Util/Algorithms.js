@@ -29,9 +29,9 @@ export default class Algorithms {
         console.log("Case: " + AlgorithmsEnum.BiggestInRadius)
         return BiggestInRadius.getParameters(props.onClick)
       case AlgorithmsEnum.ClosestCity:
-        return ClosestCity.getParameters()
+        return ClosestCity.getParameters(props.onClick)
       case AlgorithmsEnum.PopRadius:
-        return PopRadius.getParameters()
+        return PopRadius.getParameters(props.onClick)
     }
   }
 }
