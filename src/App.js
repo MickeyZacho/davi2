@@ -41,12 +41,12 @@ export default () => {
   const [countryHotelData, setCountryHotelData] = useState([]);
   const [countryCityData, setCountryCityData] = useState([]);
 
-  const [processedData, setProcData] = useState({});
-  const [processedData2, setProcData2] = useState({});
-  const [vorData, setVorData] = useState({});
-  const [vorData2, setVorData2] = useState({});
-  const [polData, setPolData] = useState({});
-  const [polData2, setPolData2] = useState({});
+  const [processedData, setProcData] = useState([]);
+  const [processedData2, setProcData2] = useState([]);
+  const [vorData, setVorData] = useState([]);
+  const [vorData2, setVorData2] = useState([]);
+  const [polData, setPolData] = useState([]);
+  const [polData2, setPolData2] = useState([]);
   const [posToCountry, setPosToCountry] = useState({});
   const [curCountry, setCurCountry] = useState({});
   const [sliderProps, setSliderProps] = useState({
@@ -61,23 +61,42 @@ export default () => {
   const [firstAlgorithmValue, setFirstAlgorithmValue] = useState({
     value: AlgorithmsEnum.BiggestInRadius,
     parameters: {radius: 50},
-    handleChange: (event, newParam) => {
+    handleChangeParam: (event, newParam) => {
       setFirstAlgorithmValue({
-        handleChange: firstAlgorithmValue.handleChange,
+        handleChangeParam: firstAlgorithmValue.handleChangeParam,
+        handleChangeSelected: firstAlgorithmValue.handleChangeSelected,
         value: firstAlgorithmValue.value,
         parameters: newParam,
       });
     },
-  });
-  
-  const [secondAlgorithmValue, setSecondAlgorithmValue] = useState({
-    value: AlgorithmsEnum.ClosestCity,
-    handleChange: (event, newValue) => {
-      setSecondAlgorithmValue({
-        handleChange: secondAlgorithmValue.handleChange,
+    handleChangeSelected: (event, newValue) =>{
+      setFirstAlgorithmValue({
+        handleChangeSelected: firstAlgorithmValue.handleChangeSelected,
+        handleChangeParam: firstAlgorithmValue.handleChangeParam,
         value: newValue,
+        parameters: firstAlgorithmValue.parameters
+    })
+    }
+  });
+  const [secondAlgorithmValue, setSecondAlgorithmValue] = useState({
+    value: AlgorithmsEnum.BiggestInRadius,
+    parameters: {radius: 50},
+    handleChangeParam: (event, newParam) => {
+      setFirstAlgorithmValue({
+        handleChangeParam: secondAlgorithmValue.handleChangeParam,
+        handleChangeSelected: secondAlgorithmValue.handleChangeSelected,
+        value: secondAlgorithmValue.value,
+        parameters: newParam,
       });
     },
+    handleChangeSelected: (event, newValue) =>{
+      setFirstAlgorithmValue({
+        handleChangeSelected: secondAlgorithmValue.handleChangeSelected,
+        handleChangeParam: secondAlgorithmValue.handleChangeParam,
+        value: newValue,
+        parameters: secondAlgorithmValue.parameters
+    })
+    }
   });
 
   const [sideParameterCitySetting, setSideParameterCitySetting] = useState({
@@ -405,9 +424,9 @@ export default () => {
       return polys;
       //return polygonMap;
     }
-
-    let procData = BiggestInRadius.Process(countryCityData, countryHotelData, firstAlgorithmValue.parameters);
-    let procData2 = ClosestCity.Process(countryCityData, countryHotelData);
+    
+    let procData = Algorithms.algorithmStateSwitch(firstAlgorithmValue.value, countryCityData, countryHotelData, firstAlgorithmValue.parameters)
+    let procData2 = Algorithms.algorithmStateSwitch(secondAlgorithmValue.value, countryCityData, countryHotelData, secondAlgorithmValue.parameters)
     let vor1 = calculateVor(procData);
     let vor2 = calculateVor(procData2);
     let pol1 = calculatePolygons(vor1);
@@ -651,12 +670,12 @@ export default () => {
         >
           <Algorithms.parameterStateSwitch
             algorithm={firstAlgorithmValue.value}
-            onClick={firstAlgorithmValue.handleChange}
+            onClick={firstAlgorithmValue.handleChangeParam}
           />
           <RadioButtons
             buttonColor={red[800]}
             title="First Algorithm"
-            changeValue={firstAlgorithmValue.handleChange}
+            changeValue={firstAlgorithmValue.handleChangeSelected}
             startValue={firstAlgorithmValue.value}
             
           />
@@ -692,7 +711,7 @@ export default () => {
           <RadioButtons
             buttonColor={blue[800]}
             title="Second Algorithm"
-            changeValue={secondAlgorithmValue.handleChange}
+            changeValue={secondAlgorithmValue.handleChangeSelected}
             startValue={secondAlgorithmValue.value}
           />
           <Algorithms.parameterStateSwitch
