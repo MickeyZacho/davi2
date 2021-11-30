@@ -409,7 +409,7 @@ export default () => {
             path.push([entry.a, entry.b]);
             polyCount += 1;
           }
-          polys.push({city: key, polygon: path[polyCount], cityPos: entry.cityPos})
+          polys.push({CityName: key, polygon: path[polyCount], cityPos: entry.cityPos})
         } while (value.length > 0);
 
         console.log(path);
