@@ -26,6 +26,7 @@ import RadioButtons from "./components/algorithmselector.js";
 import { AlgorithmsEnum } from "./Util/Algorithms.js";
 import { red, blue } from "@mui/material/colors";
 import Algorithms from "./Util/Algorithms.js";
+import { PopRadius } from "./algorithms/PopRadius.js";
 
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
@@ -34,10 +35,10 @@ const HOTEL_URL = "./hotelsout/";
 const DATA_PATH = "./CountryPop/";
 
 export default () => {
-  const [data, setData] = useState({ value: [] });
-  const [hotelData, setHotelData] = useState({ value: [] });
-  const [countryHotelData, setCountryHotelData] = useState({ value: [] });
-  const [countryCityData, setCountryCityData] = useState({ value: [] });
+  const [data, setData] = useState( [] );
+  const [hotelData, setHotelData] = useState([]);
+  const [countryHotelData, setCountryHotelData] = useState([]);
+  const [countryCityData, setCountryCityData] = useState([]);
 
   const [processedData, setProcData] = useState({});
   const [processedData2, setProcData2] = useState({});
@@ -262,7 +263,8 @@ export default () => {
         };
         kdt.insert(entry);
       });
-      const tree = new BinarySearchTree();
+      
+      const lineMap = new Map();
       let cityLines = new Map();
 
       while (!res.done) {
@@ -304,11 +306,15 @@ export default () => {
           //Identify a path by the sum of the lat and long values, hopefully being unique, for faster search, and to equal a path from a to b and from b to a
           let a = posA[0] + posA[1];
           let b = posB[0] + posB[1];
-          let nPath = tree.insert(a + b, path);
+          let id = ""+posA[0]+posA[1]+posB[0]+posB[1]
+          if(a<b) id = ""+posB[0]+posB[1]+posA[0]+posA[1]
+          let nPath = lineMap.get(id)
+          if(nPath === undefined)
+            lineMap.set(id,path);
           //When inserting, we return null if there wasn't an already existing element, otherwise we return the already existing, meaning we found a match
           //Check if the city of the found path is different from the current cell, otherwise we don't want to draw the path
 
-          if (nPath === null || nPath.cityName === near.cityName) continue;
+          if (nPath === undefined || nPath.cityName === near.cityName) continue;
           //If city path array not initialised, initialize them
           if (cityLines.get(near.cityName) === undefined)
             cityLines.set(near.cityName, []);
@@ -376,8 +382,9 @@ export default () => {
       //return polygonMap;
     }
 
-    let procData = BiggestInRadius.Process(countryCityData, countryHotelData);
-    let procData2 = ClosestCity.Process(countryCityData, countryHotelData);
+    let procData2 = BiggestInRadius.Process(countryCityData, countryHotelData);
+    let procData = PopRadius.Process(countryCityData, countryHotelData);
+    
     let vor1 = calculateVor(procData);
     let vor2 = calculateVor(procData2);
     let pol1 = calculatePolygons(vor1);
