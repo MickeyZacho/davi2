@@ -3,6 +3,7 @@ import DeckGL, {
   WebMercatorViewport,
   SolidPolygonLayer,
   PolygonLayer,
+  HeatmapLayer,
 } from "deck.gl";
 import MapGL, { _useMapControl as useMapControl } from "react-map-gl";
 import renderLayers from "./Layers.js";
@@ -448,7 +449,7 @@ export default () => {
       height: window.innerHeight - 20,
       longitude: -3.2943888952729092,
       latitude: 53.63605986631115,
-      zoom: 6,
+      zoom: 4,
       maxZoom: 16,
       pitch: 0,
       bearing: 0,
@@ -498,8 +499,8 @@ export default () => {
     getLineColor: [255, 0, 0],
     getLineWidth: 1,
     highlightColor: [255,0,0,20],
-    autoHighlight: true
-    //onHover: (info) => handleOnHover(info),
+    autoHighlight: true,
+    onHover: (info) => handleOnHover(info),
   })
   const layer2 = 
   new PolygonLayer({
@@ -517,8 +518,25 @@ export default () => {
     getLineColor: [0, 0, 255],
     getLineWidth: 1,
     highlightColor: [0,0,255,20],
-    autoHighlight: true
-    //onHover: (info) => handleOnHover(info),
+    autoHighlight: true,
+    onHover: (info) => handleOnHover(info),
+  })
+  function handleOnHover(info) {
+    const {x, y, object} = info
+    let polygonStats = document.getElementById("polygonStats");
+    
+    if (object) {
+      polygonStats.innerHTML = `
+        <div><b>City: </b>${object.city}</div>
+      `;
+    }
+  }
+  const heatMapLayer = new HeatmapLayer({
+    id: 'heatmapLayer',
+    data: processedData,
+    getPosition: d => (d.position),
+    getWeight: 1,
+    aggregation: 'SUM'
   })
   /*<svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
             <Voronoi5
@@ -558,8 +576,8 @@ export default () => {
         opacity: 0.2,
       }))
     }
-  } else {
-    layers.push(layer1)
+  } else { 
+      layers.push(heatMapLayer)
   }
 
   
@@ -573,6 +591,7 @@ export default () => {
         mapboxApiAccessToken={MAPBOX_TOKEN}
         preventStyleDiffing={false}
         onViewportChange={(v) => setViewport(new WebMercatorViewport(v))}
+        text-allow-overlap = {false}
       >
         
         <svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
@@ -617,13 +636,19 @@ export default () => {
             marginRight: 10,
             marginBottom: 20,  
           }}
-        >
+        ><div class="column">
+          <div class="row">
           <Settings 
             citySetting={sideParameterCitySetting.value} 
             hotelSetting={sideParameterHotelSetting.value} 
             changeCityValue={sideParameterCitySetting.handleChange} 
             changeHotelValue={sideParameterHotelSetting.handleChange} 
           />
+          </div>
+          <div class="row">
+          <div id ="polygonStats"></div>
+          </div>
+          </div>
         </div>
         <div
           style={{
