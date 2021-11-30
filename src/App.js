@@ -52,31 +52,30 @@ export default () => {
   const [sliderProps, setSliderProps] = useState({
     value: 20,
     handleChange: (event, newValue) => {
-      setSliderProps({
-        handleChange: sliderProps.handleChange,
+      setSliderProps((s)=>({
+        ...s,
         value: newValue,
-      });
+      }));
     },
   });
   const [firstAlgorithmValue, setFirstAlgorithmValue] = useState({
     value: AlgorithmsEnum.BiggestInRadius,
     parameters: {radius: 50},
     handleChange: (event, newParam) => {
-      setFirstAlgorithmValue({
-        handleChange: firstAlgorithmValue.handleChange,
-        value: firstAlgorithmValue.value,
+      setFirstAlgorithmValue((s) => ({
+        ...s,
         parameters: newParam,
-      });
+      }));
     },
   });
   
   const [secondAlgorithmValue, setSecondAlgorithmValue] = useState({
     value: AlgorithmsEnum.ClosestCity,
     handleChange: (event, newValue) => {
-      setSecondAlgorithmValue({
-        handleChange: secondAlgorithmValue.handleChange,
+      setSecondAlgorithmValue((s)=>({
+        ...s,
         value: newValue,
-      });
+      }));
     },
   });
 
