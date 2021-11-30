@@ -2,6 +2,7 @@ import { FormControl, FormControlLabel, FormLabel, Checkbox, Slider, FormGroup, 
 import * as React from 'react';
 import { kdTree } from "kd-tree-javascript"
 import { AlgorithmsEnum } from '../Util/Algorithms';
+import { Input, Button } from '@mui/material';
 
 export class PopRadius{
     static dist(d,b){
@@ -14,7 +15,7 @@ export class PopRadius{
         const c = 2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
         return R*c
     }
-    static Process(cityData, hotelData) {
+    static Process(cityData, hotelData, parameters) {
         console.log("PopRadius")
         //const kdt = new kdTree([], (a,b)=>Math.sqrt(Math.pow(a.lat-b.lat,2)+Math.pow(a.lng-b.lng,2)), ["lat","lng"])
         if(!hotelData.forEach || !cityData.forEach) return []
@@ -32,10 +33,10 @@ export class PopRadius{
         });
         cityData.sort((a,b) => a.population<b.population ? -1 : 1)
         cityData.forEach(e => {
-            let distance = 0.08*Math.sqrt(e.population)
-            console.log(distance)
+            let distance = parameters.scale*Math.sqrt(e.population)
+            console.log(e.CityName,distance)
             let hotelList = kdt.nearest({lng: e.position[0],lat: e.position[1]},300,distance)
-            console.log(hotelList)
+            //console.log(hotelList)
             hotelList.forEach(query => {
                 let d = query[0]
                 let entry = {
@@ -65,16 +66,38 @@ export class PopRadius{
         return Array.from(outData.values())
     }
 
-    static getParameters(){
+    static getParameters(setAlgo) {
+        const [val, setVal] = React.useState(0);
+
+        function handleChange(e){
+            setVal(e.target.value);
+        }
+
+        function handleClick(e){
+            e.preventDefault();
+            setAlgo(
+                e,
+                {scale: val}
+            )
+        }
+
         return (
-            <div style={{width: 500, justifyContent:"center", alignItems:"center"}}>
-                <span style={{ fontSize: 'medium',}}> {AlgorithmsEnum.PopRadius} Parameters</span>
-                <FormGroup>
-                    <FormControlLabel type="number" control={<TextField />} label={<span style={{ fontSize: 'small' }}>{"Radius"}</span>} />
-                    <FormControlLabel control={<TextField />} label={<span style={{ fontSize: 'small' }}>{"Scale-factor"}</span>} />
-                </FormGroup>
+
+                <div class="column" style={{width: 500, }}>
+                <div class="row">
+                <span style={{ fontSize: 'medium',}}>BigCity Scale Pop</span>
+                </div>
+                <div class="row">
+                <label for="algo1input1" id="inputid">Input weight (0-2)</label>
+                <div class="row">
+                <Input  type="number" id="algo1input1" name="algo1input1" min="0" max= "100" placeholder="0.08" onChange={handleChange}/>
+                </div>
+                </div>
+                <div class="row">
+                <Button variant="outlined" onClick={handleClick}>Reload</Button>
+                </div>
             </div>
+            
         )
     }
-    
 }

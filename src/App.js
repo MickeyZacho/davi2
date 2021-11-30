@@ -50,12 +50,10 @@ export default () => {
   const defaultParams = {
     biggestInRadius: { radius: 50 },
     closestCity: {
-      check1: true,
-      check2: false,
+      scale: 1
     },
     biggestPopScale: {
-      radius: 50,
-      scaleFactor: 1,
+      scale: 0.08
     }
   }
   const [firstAlgorithmValue, setFirstAlgorithmValue] = useState({

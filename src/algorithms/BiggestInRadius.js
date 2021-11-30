@@ -69,7 +69,7 @@ export class BiggestInRadius{
         return (
             <div class="column" style={{width: 500, }}>
                 <div class="row">
-<span style={{ fontSize: 'medium',}}>Biggest in Radius Parameters</span>
+                <span style={{ fontSize: 'medium',}}>Biggest in Radius Parameters</span>
                 </div>
                 <div class="row">
                 <label for="algo1input1" id="inputid">Input weight (0-500)</label>
