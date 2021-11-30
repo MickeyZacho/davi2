@@ -9,16 +9,16 @@ export const AlgorithmsEnum = {
 }
 
 export default class Algorithms {
-  static algorithmStateSwitch(algorithm, cityData, hotelData){
+  static algorithmStateSwitch(algorithm, cityData, hotelData, parameters){
     switch(algorithm){
       case AlgorithmsEnum.BiggestInRadius:
-        BiggestInRadius.Process(cityData, hotelData)
+        return BiggestInRadius.Process(cityData, hotelData, parameters)
         break;
       case AlgorithmsEnum.ClosestCity:
-        ClosestCity.Process(cityData, hotelData)
+        return ClosestCity.Process(cityData, hotelData, parameters)
         break;
       case AlgorithmsEnum.PopRadius:
-        PopRadius.Process(cityData, hotelData)
+        return PopRadius.Process(cityData, hotelData, parameters)
         break;
     }
   }
