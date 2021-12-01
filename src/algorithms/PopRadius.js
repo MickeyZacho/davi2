@@ -34,7 +34,6 @@ export class PopRadius{
         cityData.sort((a,b) => a.population<b.population ? -1 : 1)
         cityData.forEach(e => {
             let distance = parameters.scale*Math.sqrt(e.population)
-            console.log(e.CityName,distance)
             let hotelList = kdt.nearest({lng: e.position[0],lat: e.position[1]},300,distance)
             //console.log(hotelList)
             hotelList.forEach(query => {
@@ -63,9 +62,6 @@ export class PopRadius{
                     cityPos: null
                 })
         })
-        console.log(outData)
-        console.log(Array.from(outData.values))
-        console.log(Array.from(outData.values()))
         return Array.from(outData.values())
     }
 

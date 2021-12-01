@@ -41,14 +41,14 @@ export class BiggestInRadius{
                 CityName: (obj!=undefined)?obj[0].city:"No City",
                 country: e.country,
                 hotelId: e.hotelId,
-                cityPos: (obj!=undefined)?[obj[0].lng, obj[1].lat]:null
+                cityPos: (obj!=undefined)?[obj[0].lng, obj[0].lat]:null
             }
             outData.push(entry)
         })}
         catch(e){
             console.log(e)
         }
-        console.log(outData[0])
+        console.log(outData)
         return outData
     }
 

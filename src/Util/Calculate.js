@@ -173,7 +173,7 @@ export function combineProc(dataA, dataB){
     dataB.forEach((hotel)=>{
         let h = hotelMap.get(hotel.hotelId)
         h.CityNameB = hotel.CityName
-        h.CityPosB = hotel.CityPos
+        h.CityPosB = hotel.cityPos
         h.sameCity = h.CityNameA === h.CityNameB
     })
 
