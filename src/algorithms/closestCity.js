@@ -56,7 +56,7 @@ export class ClosestCity{
         catch(e){
             console.log(e)
         }
-        console.log(outData[0])
+        console.log(outData)
         return outData
     }
 
