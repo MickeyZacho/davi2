@@ -1,7 +1,7 @@
 import { ScatterplotLayer, TextLayer } from "deck.gl";
 import React, { useEffect, useState } from "react";
 export default props => {
-  const { data, color, size, opacity } = props;
+  const { data, color, size, opacity, visible } = props;
   
   const layers = [
     new ScatterplotLayer({
@@ -14,6 +14,7 @@ export default props => {
       radiusMaxPixels: 1000,
       lineWidthMinPixels: 1,
       pickable: true,
+      visible: visible,
       getRadius: d => Math.sqrt(d.exits),
       getFillColor: color,
       getLineColor: color,

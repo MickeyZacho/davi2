@@ -539,63 +539,90 @@ export default () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const layer1 = 
-  new PolygonLayer({
-    id: "polygon-layer",
-    data: polData,
-    stroked: true,
-    filled: true,
-    wireframe: false,
-    opacity: 1- sliderProps.value / 100, 
-    extruded: false,
-    pickable: false,
-    lineWidthMinPixels: 1,
-    getPolygon: (d) => d.polygon,
-    getFillColor: [0, 0, 0, 0],
-    getLineColor: [255, 0, 0],
-    getLineWidth: 1,
-    highlightColor: [255,0,0,20],
-    autoHighlight: true,
-    //onHover: (info) => handleOnHover(info),
-  })
-  const layer2 = 
-  new PolygonLayer({
-    id: "polygon-layer2",
-    data: polData2,
-    stroked: true,
-    filled: true,
-    wireframe: false,
-    opacity: sliderProps.value / 100,
-    extruded: false,
-    pickable: false,
-    lineWidthMinPixels: 1,
-    getPolygon: (d) => d.polygon,
-    getFillColor: [0, 0, 0, 0],
-    getLineColor: [0, 0, 255],
-    getLineWidth: 1,
-    highlightColor: [0,0,255,20],
-    autoHighlight: true,
-    //onHover: (info) => handleOnHover(info),
-  })
-  const layer3 = 
-  new PolygonLayer({
-    id: "polygon-layer3",
-    data: combData,
-    stroked: false,
-    filled: true,
-    wireframe: false,
-    opacity: 0.50,
-    extruded: false,
-    pickable: true,
-    lineWidthMinPixels: 1,
-    getPolygon: (d) => d.polygon,
-    getFillColor: (d) => [0, 255, 0, d.sameCity?0:30],
-    getLineColor: [0, 0, 0],
-    getLineWidth: 1,
-    highlightColor: [0,0,255,20],
-    autoHighlight: true,
-    onHover: (info) => handleOnHover(info),
-  })
+
+  const zoomed = viewport.zoom >= 6;
+  const layers = [
+    new PolygonLayer({
+      id: "polygon-layer",
+      data: polData,
+      stroked: true,
+      filled: true,
+      wireframe: false,
+      visible: zoomed,
+      opacity: 1- sliderProps.value / 100, 
+      extruded: false,
+      pickable: false,
+      lineWidthMinPixels: 1,
+      getPolygon: (d) => d.polygon,
+      getFillColor: [0, 0, 0, 0],
+      getLineColor: [255, 0, 0],
+      getLineWidth: 1,
+      highlightColor: [255,0,0,20],
+      autoHighlight: true,
+      //onHover: (info) => handleOnHover(info),
+    }),
+    new PolygonLayer({
+      id: "polygon-layer2",
+      data: polData2,
+      stroked: true,
+      filled: true,
+      wireframe: false,
+      visible: zoomed,
+      opacity: sliderProps.value / 100,
+      extruded: false,
+      pickable: false,
+      lineWidthMinPixels: 1,
+      getPolygon: (d) => d.polygon,
+      getFillColor: [0, 0, 0, 0],
+      getLineColor: [0, 0, 255],
+      getLineWidth: 1,
+      highlightColor: [0,0,255,20],
+      autoHighlight: true,
+      //onHover: (info) => handleOnHover(info),
+    }),
+    new PolygonLayer({
+      id: "polygon-layer3",
+      data: combData,
+      stroked: false,
+      filled: true,
+      wireframe: false,
+      visible: zoomed,
+      opacity: 0.50,
+      extruded: false,
+      pickable: true,
+      lineWidthMinPixels: 1,
+      getPolygon: (d) => d.polygon,
+      getFillColor: (d) => [0, 255, 0, d.sameCity?0:30],
+      getLineColor: [0, 0, 0],
+      getLineWidth: 1,
+      highlightColor: [0,0,255,20],
+      autoHighlight: true,
+      onHover: (info) => handleOnHover(info),
+    }),
+    renderLayers({
+      data: countryCityData,
+      color: [0, 0, 255],
+      size: 5,
+      opacity: 0.5,
+      visible: zoomed && sideParameterCitySetting.value,
+    }),
+    renderLayers({
+      data: processedData,
+      color: [255, 0, 0],
+      size: 2,
+      opacity: 0.2,
+      visible: zoomed && sideParameterHotelSetting.value,
+    }),
+    new HeatmapLayer({
+      id: 'heatmapLayer',
+      data: hotelData,
+      getPosition: d => (d.position),
+      getWeight: 1,
+      aggregation: 'SUM',
+      visible: !zoomed
+    })
+  ];
+  
   function handleOnHover(info) {
     const { x, y, object } = info
     let polygonStatsA = document.getElementById("polygonStatsA");
@@ -610,13 +637,6 @@ export default () => {
       `;
     }
   }
-  const heatMapLayer = new HeatmapLayer({
-    id: 'heatmapLayer',
-    data: hotelData,
-    getPosition: d => (d.position),
-    getWeight: 1,
-    aggregation: 'SUM'
-  })
   /*<svg viewBox={`0 0 ${viewport.width} ${viewport.height}`}>
             <Voronoi5
               viewport={viewport}
@@ -633,32 +653,7 @@ export default () => {
         <Voronoi5 viewport={viewport} data={polData} opacity={sliderProps.value / 100} colorString={"blue"}/>
         <Voronoi5 viewport={viewport} data={polData2} opacity={1-sliderProps.value / 100} colorString={"red"}/>
           </svg>*/
-  let layers = [];
-  if (viewport.zoom >= 6) {
-    layers.push(
-      layer3,
-      layer2,
-      layer1
-    )
-    if (sideParameterCitySetting.value) {
-      layers.push(renderLayers({
-        data: countryCityData,
-        color: [0, 0, 255],
-        size: 5,
-        opacity: 0.5
-      }))
-    }
-    if (sideParameterHotelSetting.value) {
-      layers.push(renderLayers({
-        data: processedData,
-        color: [255, 0, 0],
-        size: 2,
-        opacity: 0.2,
-      }))
-    }
-  } else {
-    layers.push(heatMapLayer)
-  }
+  
 
 
   return (
