@@ -18,7 +18,7 @@ import Settings from "./components/sideParameters";
 import { AlgorithmsEnum } from "./Util/Algorithms.js";
 import { red, blue } from "@mui/material/colors";
 import Algorithms from "./Util/Algorithms.js";
-
+import {calculatePolygons, calculateVor, combineProc} from "./Util/Calculate.js"
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
 const HOTEL_URL = "./hotelsout/";
@@ -36,6 +36,7 @@ export default () => {
   const [vorData2, setVorData2] = useState([]);
   const [polData, setPolData] = useState([]);
   const [polData2, setPolData2] = useState([]);
+  const [combData, setCombData] = useState([]);
   const [posToCountry, setPosToCountry] = useState({});
   const [curCountry, setCurCountry] = useState({});
   const [sliderProps, setSliderProps] = useState({
@@ -308,7 +309,8 @@ export default () => {
 
   useEffect(() => {
     console.log("Calculating")
-    function calculateVor(data) {
+    
+    /*function calculateVor(data) {
       //const point = data.map(d => d.position);
       const delau = Delaunay.from(
         data,
@@ -463,7 +465,7 @@ export default () => {
       //polygonMap.forEach(value => value.forEach(v => polys.push(v)))
       return polys;
       //return polygonMap;
-    }
+    }*/
 
     let procData = Algorithms.algorithmStateSwitch(firstAlgorithmValue.value, countryCityData, countryHotelData, firstAlgorithmValue.parameters)
     let procData2 = Algorithms.algorithmStateSwitch(secondAlgorithmValue.value, countryCityData, countryHotelData, secondAlgorithmValue.parameters)
@@ -473,13 +475,16 @@ export default () => {
     let vor2 = calculateVor(procData2);
     let pol1 = calculatePolygons(vor1);
     let pol2 = calculatePolygons(vor2);
-    console.log(pol1)
+
+    let combine = combineProc(procData, procData2)
+
     setProcData(procData);
     setProcData2(procData2);
     setVorData(vor1);
     setVorData2(vor2);
     setPolData(pol1);
     setPolData2(pol2);
+    setCombData(combine);
   }, [countryCityData, countryHotelData, firstAlgorithmValue, secondAlgorithmValue]);
 
   useEffect(() => {
@@ -505,11 +510,13 @@ export default () => {
     })
   );
   useEffect(() => {
+    if(viewport.zoom < 6) return
     try {
       //console.log(curCountry)
       let position = [viewport.longitude, viewport.latitude];
       let country = posToCountry.query(position);
       if (country !== curCountry) {
+        console.log("Updating country to " + country + " - " + viewport.zoom)
         setCurCountry(country);
       }
     } catch { }
@@ -541,7 +548,7 @@ export default () => {
     wireframe: false,
     opacity: 1- sliderProps.value / 100, 
     extruded: false,
-    pickable: true,
+    pickable: false,
     lineWidthMinPixels: 1,
     getPolygon: (d) => d.polygon,
     getFillColor: [0, 0, 0, 0],
@@ -549,7 +556,7 @@ export default () => {
     getLineWidth: 1,
     highlightColor: [255,0,0,20],
     autoHighlight: true,
-    onHover: (info) => handleOnHover(info),
+    //onHover: (info) => handleOnHover(info),
   })
   const layer2 = 
   new PolygonLayer({
@@ -560,7 +567,7 @@ export default () => {
     wireframe: false,
     opacity: sliderProps.value / 100,
     extruded: false,
-    pickable: true,
+    pickable: false,
     lineWidthMinPixels: 1,
     getPolygon: (d) => d.polygon,
     getFillColor: [0, 0, 0, 0],
@@ -568,21 +575,44 @@ export default () => {
     getLineWidth: 1,
     highlightColor: [0,0,255,20],
     autoHighlight: true,
+    //onHover: (info) => handleOnHover(info),
+  })
+  const layer3 = 
+  new PolygonLayer({
+    id: "polygon-layer3",
+    data: combData,
+    stroked: false,
+    filled: true,
+    wireframe: false,
+    opacity: 0.50,
+    extruded: false,
+    pickable: true,
+    lineWidthMinPixels: 1,
+    getPolygon: (d) => d.polygon,
+    getFillColor: (d) => [0, 255, 0, d.sameCity?0:30],
+    getLineColor: [0, 0, 0],
+    getLineWidth: 1,
+    highlightColor: [0,0,255,20],
+    autoHighlight: true,
     onHover: (info) => handleOnHover(info),
   })
   function handleOnHover(info) {
     const { x, y, object } = info
-    let polygonStats = document.getElementById("polygonStats");
-
+    let polygonStatsA = document.getElementById("polygonStatsA");
+    let polygonStatsB = document.getElementById("polygonStatsB");
     if (object) {
-      polygonStats.innerHTML = `
-        <div><b>City: </b>${object.CityName}</div>
+      polygonStatsA.innerHTML = `
+        <div><b>City: </b>${object.CityNameA}</div>
+      `;
+      
+      polygonStatsB.innerHTML = `
+        <div><b>City: </b>${object.CityNameB}</div>
       `;
     }
   }
   const heatMapLayer = new HeatmapLayer({
     id: 'heatmapLayer',
-    data: processedData,
+    data: hotelData,
     getPosition: d => (d.position),
     getWeight: 1,
     aggregation: 'SUM'
@@ -606,6 +636,7 @@ export default () => {
   let layers = [];
   if (viewport.zoom >= 6) {
     layers.push(
+      layer3,
       layer2,
       layer1
     )
@@ -695,7 +726,9 @@ export default () => {
               />
             </div>
             <div class="row">
-              <div id="polygonStats"></div>
+              <div id="polygonStatsA"></div>
+              
+              <div id="polygonStatsB"></div>
             </div>
           </div>
         </div>

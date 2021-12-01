@@ -48,6 +48,7 @@ export class ClosestCity{
                 position: [+e.position[0],+e.position[1]],
                 CityName: currentCity.city,
                 country: e.country,
+                hotelId: e.hotelId,
                 cityPos: [currentCity.lng, currentCity.lat]
             }
             outData.push(entry)
@@ -83,7 +84,7 @@ export class ClosestCity{
                 <div class="row">
                 <label for="algo1input1" id="inputid">Input weight (0-100)</label>
                 <div class="row">
-                <Input  type="number" id="algo1input1" name="algo1input1" min="0" max= "100" placeholder="standard: 50 " onChange={handleChange}/>
+                <Input  type="number" id="algo1input1" name="algo1input1" min="0" max= "100" placeholder="standard: 0 " onChange={handleChange}/>
                 </div>
                 </div>
                 <div class="row">

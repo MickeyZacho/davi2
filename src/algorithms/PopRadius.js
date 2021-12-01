@@ -43,6 +43,7 @@ export class PopRadius{
                     position: [+d.lng,+d.lat],
                     CityName: e.CityName,
                     country: d.country,
+                    hotelId: d.hotelId,
                     cityPos: e.position
                 }
                 outData.set(d.hotelId, entry)
@@ -57,7 +58,9 @@ export class PopRadius{
                 outData.set(d.hotelId, {
                     position: [+d.position[0], +d.position[1]],
                     CityName: "No City",
-                    country: d.country
+                    hotelId: d.hotelId,
+                    country: d.country,
+                    cityPos: null
                 })
         })
         console.log(outData)

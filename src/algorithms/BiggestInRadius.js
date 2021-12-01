@@ -40,6 +40,7 @@ export class BiggestInRadius{
                 position: [+e.position[0],+e.position[1]],
                 CityName: (obj!=undefined)?obj[0].city:"No City",
                 country: e.country,
+                hotelId: e.hotelId,
                 cityPos: (obj!=undefined)?[obj[0].lng, obj[1].lat]:null
             }
             outData.push(entry)
