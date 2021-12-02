@@ -544,23 +544,24 @@ export default () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+  const sliderPropValue1 = (1 - sliderProps.value/ 100)
+  const sliderPropValue2 = (sliderProps.value / 100)
+  console.log("First algo: " + sliderPropValue1);
+  console.log("Second algo: " + sliderPropValue2);
   const zoomed = viewport.zoom >= 6;
   const layers = [
     new PolygonLayer({
       id: "polygon-layer",
       data: polData,
       stroked: true,
-      filled: true,
       wireframe: false,
       visible: zoomed,
-      opacity: 1- sliderProps.value / 100, 
       extruded: false,
       pickable: false,
       lineWidthMinPixels: 1,
       getPolygon: (d) => d.polygon,
       getFillColor: [0, 0, 0, 0],
-      getLineColor: COLOR_FIRST_ALGORITHM,
+      getLineColor: [COLOR_FIRST_ALGORITHM[0], COLOR_FIRST_ALGORITHM[1], COLOR_FIRST_ALGORITHM[2], sliderPropValue1],
       getLineWidth: 1,
       highlightColor: [255,0,0,20],
       autoHighlight: true,
@@ -570,16 +571,14 @@ export default () => {
       id: "polygon-layer2",
       data: polData2,
       stroked: true,
-      filled: true,
       wireframe: false,
       visible: zoomed,
-      opacity: sliderProps.value / 100,
       extruded: false,         
       pickable: false,
       lineWidthMinPixels: 1,
       getPolygon: (d) => d.polygon,
       getFillColor: [0, 0, 0, 0],
-      getLineColor: COLOR_SECOND_ALGORITHM,
+      getLineColor: [COLOR_SECOND_ALGORITHM[0], COLOR_SECOND_ALGORITHM[1], COLOR_SECOND_ALGORITHM[2], sliderPropValue2],
       getLineWidth: 1,
       highlightColor: [0,0,255,20],
       autoHighlight: true,
@@ -597,7 +596,7 @@ export default () => {
       pickable: true,
       lineWidthMinPixels: 1,
       getPolygon: (d) => d.polygon,
-      getFillColor: (d) => [0, 255, 0, d.sameCity?0:30],
+      getFillColor: (d) => [COLOR_PROBLEM_AREA[0], COLOR_PROBLEM_AREA[1], COLOR_PROBLEM_AREA[2], d.sameCity?0:30],
       getLineColor: [0, 0, 0],
       getLineWidth: 1,
       highlightColor: [0,0,255,20],
