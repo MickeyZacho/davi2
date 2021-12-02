@@ -23,11 +23,11 @@ const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
 const HOTEL_URL = "./hotelsout/";
 const DATA_PATH = "./CountryPop/";
-const COLOR_HOTEL = [0, 153, 136];
-const COLOR_CITY = [51, 187, 238];
-const COLOR_FIRST_ALGORITHM = [187, 187, 187]
-const COLOR_SECOND_ALGORITHM = [0, 119, 187]
-const COLOR_PROBLEM_AREA = [204, 51, 17]
+const COLOR_HOTEL = [166,206,227];
+const COLOR_CITY = [178,223,138];
+const COLOR_FIRST_ALGORITHM = [27,158,119]
+const COLOR_SECOND_ALGORITHM = [117,112,179]
+const COLOR_PROBLEM_AREA = [217,95,2]
 
 export default () => {
   const [data, setData] = useState([]);
@@ -607,14 +607,14 @@ export default () => {
       data: countryCityData,
       color: COLOR_CITY,
       size: 5,
-      opacity: 0.5,
+      opacity: 1,
       visible: zoomed && sideParameterCitySetting.value,
     }),
     renderLayers({
       data: processedData,
       color: COLOR_HOTEL,
       size: 2,
-      opacity: 0.2,
+      opacity: 1,
       visible: zoomed && sideParameterHotelSetting.value,
     }),
     new HeatmapLayer({
@@ -633,11 +633,11 @@ export default () => {
     let polygonStatsB = document.getElementById("polygonStatsB");
     if (object) {
       polygonStatsA.innerHTML = `
-        <div><b>City: </b>${object.CityNameA}</div>
+        <div><b>First: </b>${object.CityNameA}</div>
       `;
       
       polygonStatsB.innerHTML = `
-        <div><b>City: </b>${object.CityNameB}</div>
+        <div><b>Second: </b>${object.CityNameB}</div>
       `;
     }
   }
