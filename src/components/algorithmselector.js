@@ -31,9 +31,9 @@ export default (props) => {
             <Radio
               {...controlProps(AlgorithmsEnum[item])}
               sx={{
-                color: buttonColor,
+                color: `rgb(${buttonColor[0]}, ${buttonColor[1]}, ${buttonColor[2]})`,
                 "&.Mui-checked": {
-                  color: buttonColor,
+                  color: `rgb(${buttonColor[0]}, ${buttonColor[1]}, ${buttonColor[2]})`,
                 },
                 "& .MuiSvgIcon-root": {
                   fontSize: 14,

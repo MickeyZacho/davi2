@@ -9,7 +9,7 @@ import { FormGroup, Checkbox } from "@mui/material";
 import { red, blue } from "@mui/material/colors";
 
 export default (props) => {
-  const { citySetting, hotelSetting, changeCityValue, changeHotelValue } = props;
+  const { citySetting, hotelSetting, changeCityValue, changeHotelValue, cityColor, hotelColor } = props;
 
   const handleCityChange = (event) => {
     changeCityValue(event, event.target.checked);
@@ -40,9 +40,9 @@ export default (props) => {
             <Checkbox
               {...controlCityProps(citySetting)}
               sx={{
-            color: blue[800],
+            color: `rgb(${cityColor[0]}, ${cityColor[1]}, ${cityColor[2]})`,
             '&.Mui-checked': {
-              color: blue[600],
+              color:`rgb(${cityColor[0]}, ${cityColor[1]}, ${cityColor[2]})`,
             },}}
             />
           }
@@ -56,9 +56,9 @@ export default (props) => {
             <Checkbox
               {...controlHotelProps(hotelSetting)}
               sx={{
-            color: red[800],
+            color: `rgb(${hotelColor[0]}, ${hotelColor[1]}, ${hotelColor[2]})`,
             '&.Mui-checked': {
-              color: red[600],
+              color: `rgb(${hotelColor[0]}, ${hotelColor[1]}, ${hotelColor[2]})`,
             },
           }}
             />

@@ -23,6 +23,11 @@ const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXTOKEN;
 const DATA_URL = "./worldcities3.csv";
 const HOTEL_URL = "./hotelsout/";
 const DATA_PATH = "./CountryPop/";
+const COLOR_HOTEL = [0, 153, 136];
+const COLOR_CITY = [51, 187, 238];
+const COLOR_FIRST_ALGORITHM = [187, 187, 187]
+const COLOR_SECOND_ALGORITHM = [0, 119, 187]
+const COLOR_PROBLEM_AREA = [204, 51, 17]
 
 export default () => {
   const [data, setData] = useState([]);
@@ -555,7 +560,7 @@ export default () => {
       lineWidthMinPixels: 1,
       getPolygon: (d) => d.polygon,
       getFillColor: [0, 0, 0, 0],
-      getLineColor: [255, 0, 0],
+      getLineColor: COLOR_FIRST_ALGORITHM,
       getLineWidth: 1,
       highlightColor: [255,0,0,20],
       autoHighlight: true,
@@ -569,12 +574,12 @@ export default () => {
       wireframe: false,
       visible: zoomed,
       opacity: sliderProps.value / 100,
-      extruded: false,
+      extruded: false,         
       pickable: false,
       lineWidthMinPixels: 1,
       getPolygon: (d) => d.polygon,
       getFillColor: [0, 0, 0, 0],
-      getLineColor: [0, 0, 255],
+      getLineColor: COLOR_SECOND_ALGORITHM,
       getLineWidth: 1,
       highlightColor: [0,0,255,20],
       autoHighlight: true,
@@ -601,14 +606,14 @@ export default () => {
     }),
     renderLayers({
       data: countryCityData,
-      color: [0, 0, 255],
+      color: COLOR_CITY,
       size: 5,
       opacity: 0.5,
       visible: zoomed && sideParameterCitySetting.value,
     }),
     renderLayers({
       data: processedData,
-      color: [255, 0, 0],
+      color: COLOR_HOTEL,
       size: 2,
       opacity: 0.2,
       visible: zoomed && sideParameterHotelSetting.value,
@@ -718,6 +723,8 @@ export default () => {
                 hotelSetting={sideParameterHotelSetting.value}
                 changeCityValue={sideParameterCitySetting.handleChange}
                 changeHotelValue={sideParameterHotelSetting.handleChange}
+                cityColor={COLOR_CITY}
+                hotelColor={COLOR_HOTEL}
               />
             </div>
             <div class="row">
@@ -767,7 +774,7 @@ export default () => {
             onClick={firstAlgorithmValue.handleChangeParam}
           />
           <RadioButtons
-            buttonColor={red[800]}
+            buttonColor={COLOR_FIRST_ALGORITHM}
             title="First Algorithm"
             changeValue={firstAlgorithmValue.handleChangeSelected}
             startValue={firstAlgorithmValue.value}
@@ -803,7 +810,7 @@ export default () => {
             />
           </Box>
           <RadioButtons
-            buttonColor={blue[800]}
+            buttonColor={COLOR_SECOND_ALGORITHM}
             title="Second Algorithm"
             changeValue={secondAlgorithmValue.handleChangeSelected}
             startValue={secondAlgorithmValue.value}

@@ -38,7 +38,6 @@ export default props => {
       tooltip.innerHTML = `
         <div><b>Country:</b> ${object.country}</div>
         <div><b>City:</b> ${object.CityName}</div>
-        ${isCity(object) ? `<b><div>Average hotel distance:</b> ${avgHotelDistance}</div>` : ""}
       `;
     } else { 
       tooltip.style.visibility = "hidden"
