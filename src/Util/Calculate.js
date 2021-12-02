@@ -110,6 +110,7 @@ export function calculateVor(data) {
       }
       res = it.next();
     }
+
     return cityLines;
   }
 export function calculatePolygons(data) {
@@ -144,8 +145,8 @@ export function calculatePolygons(data) {
           path.push([entry.a, entry.b]);
           polyCount += 1;
         }
-        polys.push({CityName: key, polygon: path[polyCount], cityPos: entry.cityPos})
       } while (value.length > 0);
+      polys.push({CityName: key, polygon: path[polyCount], cityPos: entry.cityPos})
 
       //console.log(path);
      // polygonMap.set(key, path);
@@ -212,6 +213,5 @@ export function combineProc(dataA, dataB){
       polys.push(near)
       res = it.next();
     }
-    console.log(polys)
     return polys
 }
