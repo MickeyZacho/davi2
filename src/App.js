@@ -474,8 +474,7 @@ export default () => {
 
     let procData = Algorithms.algorithmStateSwitch(firstAlgorithmValue.value, countryCityData, countryHotelData, firstAlgorithmValue.parameters)
     let procData2 = Algorithms.algorithmStateSwitch(secondAlgorithmValue.value, countryCityData, countryHotelData, secondAlgorithmValue.parameters)
-    console.log(1,procData)
-    console.log(2,procData2);
+
     let vor1 = calculateVor(procData);
     let vor2 = calculateVor(procData2);
     let pol1 = calculatePolygons(vor1);
@@ -544,8 +543,8 @@ export default () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const sliderPropValue1 = (255 - sliderProps.value * 2.55)
-  const sliderPropValue2 = (sliderProps.value * 2.55)
+  const sliderPropValue1 = (1 - sliderProps.value /100)
+  const sliderPropValue2 = (sliderProps.value /100)
   console.log("First algo: " + sliderPropValue1);
   console.log("Second algo: " + sliderPropValue2);
   const zoomed = viewport.zoom >= 6;
