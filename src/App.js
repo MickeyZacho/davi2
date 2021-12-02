@@ -544,8 +544,8 @@ export default () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const sliderPropValue1 = (1 - sliderProps.value/ 100)
-  const sliderPropValue2 = (sliderProps.value / 100)
+  const sliderPropValue1 = (255 - sliderProps.value * 2.55)
+  const sliderPropValue2 = (sliderProps.value * 2.55)
   console.log("First algo: " + sliderPropValue1);
   console.log("Second algo: " + sliderPropValue2);
   const zoomed = viewport.zoom >= 6;
