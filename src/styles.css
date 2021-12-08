@@ -18,7 +18,13 @@ path {
 #polygonStats {
   padding:5px;
 }
-
+#reloadButton {
+  padding-top:5px;
+}
+.item{
+  padding:5px;
+  width: 15%
+}
 #tooltip {
   background-color: rgba(0, 0, 0, 0.651);
   color: #fff;

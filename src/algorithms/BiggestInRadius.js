@@ -78,7 +78,7 @@ export class BiggestInRadius{
                 <Input  type="number" id="algo1input1" name="algo1input1" min="0" max= "500" placeholder="standard: 50 " onChange={handleChange}/>
                 </div>
                 </div>
-                <div class="row">
+                <div class="row" id="reloadButton">
                 <Button variant="outlined" onClick={handleClick}>Reload</Button>
                 </div>
 

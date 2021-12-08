@@ -466,7 +466,6 @@ export default () => {
           </svg>*/
   
 
-
   return (
 
     <div style={{ height: "100vh" }}>
@@ -540,58 +539,40 @@ export default () => {
             </div>
           </div>
         </div>
+        
         <div
           style={{
             position: "absolute",
-            width: viewport.width - 100,
-            height: viewport.height,
+            width: "95vw",
+            height: nonMapHeight,
             bottom: 10,
             display: "flex",
-            justifyContent: "space-between",
-            height: nonMapHeight,
+            justifyContent: "space-evenly",
+            alignItems: "flex-start",
             marginLeft: 25,
             marginRight: 25,
-            marginTop: 10,
-            marginBottom: 10,
             opacity: 1,
-            backgroundColor: "white",
-
             borderRadius: "25px",
-            border: "2px solid #4c768d"
-          }}
-        ></div>
-        <div
-          style={{
-            position: "absolute",
-            width: viewport.width - 150,
-            height: viewport.height,
-            bottom: 10,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: nonMapHeight,
-            marginLeft: 50,
-            marginRight: 10,
-            marginBottom: 20,
+            border: "2px solid #4c768d",
+            backgroundColor: "white",
           }}
         >
-          <Algorithms.parameterStateSwitch
-            algorithm={firstAlgorithmValue.value}
-            onClick={firstAlgorithmValue.handleChangeParam}
-          />
-          <RadioButtons
-            buttonColor={COLOR_FIRST_ALGORITHM}
-            title="First Algorithm"
-            changeValue={firstAlgorithmValue.handleChangeSelected}
-            startValue={firstAlgorithmValue.value}
+          <div class="item">
+            <Algorithms.parameterStateSwitch
+              algorithm={firstAlgorithmValue.value}
+              onClick={firstAlgorithmValue.handleChangeParam}
+            />
+          </div>
+          <div class="item">
+            <RadioButtons
+              buttonColor={COLOR_FIRST_ALGORITHM}
+              title="First Algorithm"
+              changeValue={firstAlgorithmValue.handleChangeSelected}
+              startValue={firstAlgorithmValue.value}
 
-          />
-          <Box
-            sx={{
-              width: 800,
-              alignItems: 'center',
-            }}
-          >
+            />
+          </div>
+          <div class="item">
             Transparency
             <Slider
               value={sliderProps.value}
@@ -614,21 +595,23 @@ export default () => {
                 },
               ]}
             />
-          </Box>
+          </div>
+          <div class="item">
           <RadioButtons
             buttonColor={COLOR_SECOND_ALGORITHM}
             title="Second Algorithm"
             changeValue={secondAlgorithmValue.handleChangeSelected}
             startValue={secondAlgorithmValue.value}
-          />
+          /></div>
+          <div class="item">
           <Algorithms.parameterStateSwitch
             algorithm={secondAlgorithmValue.value}
             onClick={secondAlgorithmValue.handleChangeParam}
-          />
+          /></div>
 
         </div>
       </div>
-      <div id="tooltip" style={{ position: 'absolute', zIndex: 1, pointerEvents: 'none' }} />
+      <div id="tooltip" style={{ position: 'absolute', zIndex: 1, pointerEvents: 'none', visibility: "hidden", width: 0, height: 0 }} />
     </div>
 
   );

@@ -86,13 +86,13 @@ export class PopRadius{
                 <div class="row">
                 <span style={{ fontSize: 'medium',}}>BigCity Scale Pop</span>
                 </div>
-                <div class="row">
+                <div class="row" id="reloadButton">
                 <label for="algo1input1" id="inputid">Input weight (0-2)</label>
-                <div class="row">
+                <div class="row" id="reloadButton">
                 <Input  type="number" id="algo1input1" name="algo1input1" min="0" max= "100" placeholder="0.08" onChange={handleChange}/>
                 </div>
                 </div>
-                <div class="row">
+                <div class="row" id="reloadButton">
                 <Button variant="outlined" onClick={handleClick}>Reload</Button>
                 </div>
             </div>
