@@ -467,7 +467,7 @@ export default () => {
 
   return (
 
-    <div style={{ height: "100vh" }}>
+    <div>
       <div>
         <MapGL
           {...viewport}
@@ -486,30 +486,11 @@ export default () => {
             controller={true}
           />
         </MapGL>
+        
         <div
           style={{
             position: "absolute",
-            width: nonMapHeight,
-            height: viewport.height - nonMapHeight - 100,
-            right: 10,
-            top: 10,
-            display: "flex",
-            justifyContent: "space-between",
-            marginLeft: 25,
-            marginRight: 25,
-            marginTop: 10,
-            marginBottom: 10,
-            opacity: 1,
-            backgroundColor: "white",
-
-            borderRadius: "25px",
-            border: "2px solid #4c768d"
-          }}
-        ></div>
-        <div
-          style={{
-            position: "absolute",
-            width: nonMapHeight,
+            width: 200,
             height: viewport.height - nonMapHeight - 100,
             top: 10,
             right: 10,
@@ -519,9 +500,13 @@ export default () => {
             marginLeft: 50,
             marginRight: 10,
             marginBottom: 20,
+            opacity: 1,
+            backgroundColor: "white",
+
+            borderRadius: "25px",
+            border: "2px solid #4c768d"
           }}
-        ><div class="column">
-            <div class="row">
+        >
               <Settings
                 citySetting={sideParameterCitySetting.value}
                 hotelSetting={sideParameterHotelSetting.value}
@@ -530,26 +515,20 @@ export default () => {
                 cityColor={COLOR_CITY}
                 hotelColor={COLOR_HOTEL}
               />
-            </div>
-            <div class="row">
               <div id="polygonStatsA"></div>
               
               <div id="polygonStatsB"></div>
-            </div>
-          </div>
         </div>
         
         <div
           style={{
             position: "absolute",
-            width: "95vw",
+            width: "90vw",
             height: nonMapHeight,
             bottom: 10,
             display: "flex",
             justifyContent: "space-evenly",
             alignItems: "flex-start",
-            marginLeft: 25,
-            marginRight: 25,
             opacity: 1,
             borderRadius: "25px",
             border: "2px solid #4c768d",
@@ -610,7 +589,7 @@ export default () => {
 
         </div>
       </div>
-      <div id="tooltip" style={{ position: 'absolute', zIndex: 1, pointerEvents: 'none', visibility: "hidden", width: 0, height: 0 }} />
+      <div id="tooltip" style={{ position: 'absolute', zIndex: 1, pointerEvents: 'none'}} />
     </div>
 
   );

@@ -5,7 +5,6 @@ body {
 }
 .App {
   font-family: sans-serif;
-  text-align: center;
 }
 
 path {
@@ -34,4 +33,7 @@ path {
   border-style: solid;
   border-radius: 3px;
   border-color: black;
+  visibility: hidden;
+  top: 0px;
+  left: 0px;
 }

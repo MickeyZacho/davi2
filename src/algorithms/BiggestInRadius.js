@@ -69,16 +69,16 @@ export class BiggestInRadius{
         }
         return (
             <div class="column" style={{width: 500, }}>
-                <div class="row">
-                <span style={{ fontSize: 'medium',}}>Biggest in Radius Parameters</span>
+                <div class="row" style={{padding: "2px"}}>
+                <span style={{ fontSize: 'small' }}>Biggest in Radius Parameters</span>
                 </div>
-                <div class="row">
+                <div class="row" style={{padding: "2px"}}>
                 <label for="algo1input1" id="inputid">Input weight (0-500)</label>
-                <div class="row">
+                <div class="row" style={{padding: "2px"}}>
                 <Input  type="number" id="algo1input1" name="algo1input1" min="0" max= "500" placeholder="standard: 50 " onChange={handleChange}/>
                 </div>
                 </div>
-                <div class="row" id="reloadButton">
+                <div class="row" id="reloadButton" style={{padding: "2px"}}>
                 <Button variant="outlined" onClick={handleClick}>Reload</Button>
                 </div>
 
