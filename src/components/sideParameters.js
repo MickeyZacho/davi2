@@ -66,6 +66,8 @@ export default (props) => {
           
           label="Hotels"
         />
+        <div id="polygonStatsA"></div>
+        <div id="polygonStatsB"></div>
         </FormGroup>)
   };
   return (

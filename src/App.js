@@ -515,9 +515,6 @@ export default () => {
                 cityColor={COLOR_CITY}
                 hotelColor={COLOR_HOTEL}
               />
-              <div id="polygonStatsA"></div>
-              
-              <div id="polygonStatsB"></div>
         </div>
         
         <div
