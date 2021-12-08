@@ -552,12 +552,12 @@ export default () => {
           <div
             style={{
               position: "absolute",
-              width: "90vw",
+              width: "auto",
               height: "auto",
               bottom: 10,
               left: "5vw",
               display: "flex",
-              justifyContent: "space-evenly",
+              justifyContent: "space-between",
               alignItems: "center",
               opacity: 1,
               borderRadius: "25px",
