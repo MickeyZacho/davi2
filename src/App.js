@@ -233,7 +233,7 @@ export default () => {
         return {
           CityName: d.city,
           position: [+d.lng, +d.lat],
-          population: d.population,
+          population: +d.population,
           country: d.country,
         };
       });
@@ -326,7 +326,6 @@ export default () => {
       let position = [viewport.longitude, viewport.latitude];
       let country = posToCountry.query(position);
       if (country !== curCountry) {
-        console.log("Updating country to " + country + " - " + viewport.zoom)
         setCurCountry(country);
       }
     } catch { }
@@ -355,6 +354,25 @@ export default () => {
   console.log("Second algo: " + sliderPropValue2);
   const zoomed = viewport.zoom >= 6;
   const layers = [
+    new PolygonLayer({
+      id: "polygon-layer3",
+      data: combData,
+      stroked: false,
+      filled: true,
+      wireframe: false,
+      visible: zoomed,
+      opacity: 0.50,
+      extruded: false,
+      pickable: true,
+      lineWidthMinPixels: 1,
+      getPolygon: (d) => d.polygon,
+      getFillColor: (d) => [COLOR_PROBLEM_AREA[0], COLOR_PROBLEM_AREA[1], COLOR_PROBLEM_AREA[2], d.sameCity?0:30],
+      getLineColor: [0, 0, 0],
+      getLineWidth: 1,
+      highlightColor: [0,0,255,20],
+      autoHighlight: true,
+      onHover: (info) => handleOnHover(info),
+    }),
     new PolygonLayer({
       id: "polygon-layer",
       data: polData,
@@ -390,25 +408,6 @@ export default () => {
       highlightColor: [0,0,255,20],
       autoHighlight: true,
       //onHover: (info) => handleOnHover(info),
-    }),
-    new PolygonLayer({
-      id: "polygon-layer3",
-      data: combData,
-      stroked: false,
-      filled: true,
-      wireframe: false,
-      visible: zoomed,
-      opacity: 0.50,
-      extruded: false,
-      pickable: true,
-      lineWidthMinPixels: 1,
-      getPolygon: (d) => d.polygon,
-      getFillColor: (d) => [COLOR_PROBLEM_AREA[0], COLOR_PROBLEM_AREA[1], COLOR_PROBLEM_AREA[2], d.sameCity?0:30],
-      getLineColor: [0, 0, 0],
-      getLineWidth: 1,
-      highlightColor: [0,0,255,20],
-      autoHighlight: true,
-      onHover: (info) => handleOnHover(info),
     }),
     renderLayers({
       data: countryCityData,

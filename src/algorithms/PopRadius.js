@@ -31,10 +31,11 @@ export class PopRadius{
             }
             kdt.insert(entry)
         });
-        cityData.sort((a,b) => a.population<b.population ? -1 : 1)
+
+        //cityData.sort((a,b) => a.population<b.population ? -1 : 1)
         cityData.forEach(e => {
             let distance = parameters.scale*Math.sqrt(e.population)
-            let hotelList = kdt.nearest({lng: e.position[0],lat: e.position[1]},300,distance)
+            let hotelList = kdt.nearest({lng: e.position[0],lat: e.position[1]},100000,distance)
             //console.log(hotelList)
             hotelList.forEach(query => {
                 let d = query[0]
@@ -43,9 +44,13 @@ export class PopRadius{
                     CityName: e.CityName,
                     country: d.country,
                     hotelId: d.hotelId,
-                    cityPos: e.position
+                    cityPos: e.position,
+                    populationOfCity: e.population
                 }
+            let old = outData.get(d.hotelId)
+            if(old===undefined || e.population > old.populationOfCity){
                 outData.set(d.hotelId, entry)
+            }
             })
         })}
         catch(e){
