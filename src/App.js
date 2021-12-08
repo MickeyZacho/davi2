@@ -524,7 +524,7 @@ export default () => {
             style={{
               position: "absolute",
               width: 200,
-              height: viewport.height - nonMapHeight - 100,
+              height: "auto",
               top: 10,
               right: 10,
               display: "flex",
@@ -553,11 +553,12 @@ export default () => {
             style={{
               position: "absolute",
               width: "90vw",
-              height: nonMapHeight,
+              height: "auto",
               bottom: 10,
               left: "5vw",
               display: "flex",
               justifyContent: "space-evenly",
+              alignItems: "center",
               opacity: 1,
               borderRadius: "25px",
               border: "2px solid #4c768d",
