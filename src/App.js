@@ -328,7 +328,7 @@ export default () => {
   const [viewport, setViewport] = useState(
     new WebMercatorViewport({
       width: window.innerWidth,
-      height: window.innerHeight - 20,
+      height: window.innerHeight,
       longitude: -3.2943888952729092,
       latitude: 53.63605986631115,
       zoom: 4,
@@ -515,9 +515,9 @@ export default () => {
         </MapGL>
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            minWidth: "100wh",
+            //display: "flex",
+            //justifyContent: "center",
+            //minWidth: "100wh",
           }}
         >
           <div
@@ -530,8 +530,8 @@ export default () => {
               display: "flex",
               justifyContent: "left",
               alignItems: "top",
-              marginLeft: 50,
-              marginBottom: 20,
+              marginLeft: 0,
+              marginBottom: 0,
               opacity: 1,
               backgroundColor: "white",
 
@@ -555,9 +555,9 @@ export default () => {
               width: "90vw",
               height: nonMapHeight,
               bottom: 10,
+              left: "5vw",
               display: "flex",
               justifyContent: "space-evenly",
-              alignItems: "flex-start",
               opacity: 1,
               borderRadius: "25px",
               border: "2px solid #4c768d",

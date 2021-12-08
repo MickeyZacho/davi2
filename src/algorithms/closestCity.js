@@ -77,7 +77,7 @@ export class ClosestCity{
 
         return (
 
-                <div class="column" style={{width: 500, }}>
+                <div class="column" >
                 <div class="row">
                 <span style={{ fontSize: 'medium',}}>Closest City</span>
                 </div>

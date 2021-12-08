@@ -87,7 +87,7 @@ export class PopRadius{
 
         return (
 
-                <div class="column" style={{width: 500, }}>
+                <div class="column" >
                 <div class="row">
                 <span style={{ fontSize: 'medium',}}>BigCity Scale Pop</span>
                 </div>

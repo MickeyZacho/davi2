@@ -68,7 +68,7 @@ export class BiggestInRadius{
             )
         }
         return (
-            <div class="column" style={{width: 500, }}>
+            <div class="column">
                 <div class="row" style={{padding: "2px"}}>
                 <span style={{ fontSize: 'small' }}>Biggest in Radius Parameters</span>
                 </div>
