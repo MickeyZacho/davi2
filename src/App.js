@@ -488,9 +488,7 @@ export default () => {
         </MapGL>
         <div style={{display: "flex",
   justifyContent: "center",
-  alignItems: "center",
-  textAlign: "center",
-  minHeight: "100vh"}}>
+  minWidth: "100wh"}}>
         <div
           style={{
             position: "absolute",
