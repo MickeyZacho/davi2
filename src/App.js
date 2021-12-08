@@ -486,7 +486,11 @@ export default () => {
             controller={true}
           />
         </MapGL>
-        
+        <div style={{display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  textAlign: "center",
+  minHeight: "100vh"}}>
         <div
           style={{
             position: "absolute",
@@ -498,7 +502,6 @@ export default () => {
             justifyContent: "left",
             alignItems: "top",
             marginLeft: 50,
-            marginRight: 10,
             marginBottom: 20,
             opacity: 1,
             backgroundColor: "white",
@@ -585,6 +588,7 @@ export default () => {
           /></div>
 
         </div>
+      </div>
       </div>
       <div id="tooltip" style={{ position: 'absolute', zIndex: 1, pointerEvents: 'none'}} />
     </div>
